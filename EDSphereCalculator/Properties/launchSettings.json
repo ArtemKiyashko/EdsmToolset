@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "EDSphereCalculator": {
+      "commandName": "Project",
+      "commandLineArgs": "-d \"C:\\repos\\EDSphereCalculator\\data\\systemsWithCoordinates.json\" --maxDist 1100 --minDist 900 --csv \"C:\\repos\\EDSphereCalculator\\data\\result.csv\""
+    }
+  }
+}
