@@ -28,8 +28,9 @@ namespace EDSphereCalculator.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Id64 = table.Column<long>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
+                    EdsmId = table.Column<int>(nullable: false),
+                    EdsmId64 = table.Column<long>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
                     Date = table.Column<DateTime>(nullable: false),
                     CoordinatesId = table.Column<int>(nullable: true)
                 },
@@ -50,7 +51,8 @@ namespace EDSphereCalculator.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true),
+                    EdsmId = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     StarId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -68,15 +70,13 @@ namespace EDSphereCalculator.Migrations
                 name: "Distances",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DistanceFromId = table.Column<int>(nullable: true),
-                    DistanceToId = table.Column<int>(nullable: true),
+                    DistanceFromId = table.Column<int>(nullable: false),
+                    DistanceToId = table.Column<int>(nullable: false),
                     LightYears = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Distances", x => x.Id);
+                    table.PrimaryKey("PK_Distances", x => new { x.DistanceFromId, x.DistanceToId });
                     table.ForeignKey(
                         name: "FK_Distances_Stars_DistanceFromId",
                         column: x => x.DistanceFromId,
@@ -88,18 +88,13 @@ namespace EDSphereCalculator.Migrations
                         column: x => x.DistanceToId,
                         principalTable: "Stars",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_CelestialBody_StarId",
                 table: "CelestialBody",
                 column: "StarId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Distances_DistanceFromId",
-                table: "Distances",
-                column: "DistanceFromId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Distances_DistanceToId",

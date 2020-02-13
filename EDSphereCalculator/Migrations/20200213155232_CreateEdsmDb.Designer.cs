@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EDSphereCalculator.Migrations
 {
     [DbContext(typeof(EdsmDbContext))]
-    [Migration("20200213132258_CreateEdsmDb")]
+    [Migration("20200213155232_CreateEdsmDb")]
     partial class CreateEdsmDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,7 +28,11 @@ namespace EDSphereCalculator.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("EdsmId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("StarId")
@@ -43,23 +47,16 @@ namespace EDSphereCalculator.Migrations
 
             modelBuilder.Entity("EDSphereCalculator.CalculatorModels.Distance", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("DistanceFromId")
+                    b.Property<int>("DistanceFromId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DistanceToId")
+                    b.Property<int>("DistanceToId")
                         .HasColumnType("int");
 
                     b.Property<double>("LightYears")
                         .HasColumnType("float");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("DistanceFromId");
+                    b.HasKey("DistanceFromId", "DistanceToId");
 
                     b.HasIndex("DistanceToId");
 
@@ -79,10 +76,14 @@ namespace EDSphereCalculator.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<long?>("Id64")
+                    b.Property<int>("EdsmId")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("EdsmId64")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -123,12 +124,16 @@ namespace EDSphereCalculator.Migrations
             modelBuilder.Entity("EDSphereCalculator.CalculatorModels.Distance", b =>
                 {
                     b.HasOne("EDSphereCalculator.CalculatorModels.Star", "DistanceFrom")
-                        .WithMany()
-                        .HasForeignKey("DistanceFromId");
+                        .WithMany("DistancesTo")
+                        .HasForeignKey("DistanceFromId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("EDSphereCalculator.CalculatorModels.Star", "DistanceTo")
-                        .WithMany()
-                        .HasForeignKey("DistanceToId");
+                        .WithMany("DistancesFrom")
+                        .HasForeignKey("DistanceToId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("EDSphereCalculator.CalculatorModels.Star", b =>
