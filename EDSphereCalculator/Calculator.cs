@@ -16,12 +16,12 @@ namespace EDSphereCalculator
     public class Calculator
     {
         private readonly CmdOptions _options;
-        private readonly IResultWriterProxy<Star> _resultWriterProxy;
+        private readonly IResultWriterProxy<Distance> _resultWriterProxy;
         private readonly IMapper _mapper;
         private readonly IDataReader<Star> _dataReader;
 
         public Calculator(CmdOptions options,
-            IResultWriterProxy<Star> resultWriterProxy,
+            IResultWriterProxy<Distance> resultWriterProxy,
             IMapper mapper,
             IDataReader<Star> dataReader)
         {
@@ -31,17 +31,19 @@ namespace EDSphereCalculator
             _dataReader = dataReader;
         }
 
-        public void CalculateDistance(Star from, Star to)
+        public Distance CalculateDistance(Star from, Star to)
         {
             var distance = Math.Sqrt(
                 Math.Pow((to.Coordinates.X - from.Coordinates.X), 2)
                     + Math.Pow((to.Coordinates.Y - from.Coordinates.Y), 2)
                     + Math.Pow((to.Coordinates.Z - from.Coordinates.Z), 2)
                 );
-            to.DistanceFrom = from;
-            to.Distance = distance;
-            from.DistanceFrom = to;
-            from.Distance = distance;
+            return new Distance
+            {
+                DistanceFrom = from,
+                DistanceTo = to,
+                LightYears = distance
+            };
         }
 
         public async Task RunProcessingAsync()
@@ -49,9 +51,9 @@ namespace EDSphereCalculator
             var initialStar = _mapper.Map<Star>(_options);
             while (await _dataReader.ReadAsync())
             {
-                CalculateDistance(initialStar, _dataReader.Result);
-                if (_dataReader.Result.Distance >= _options.MinimumDistance && _dataReader.Result.Distance <= _options.MaximumDistance)
-                    await _resultWriterProxy.WriteResultAsync(_dataReader.Result);
+                var distance = CalculateDistance(initialStar, _dataReader.Result);
+                if (distance.LightYears >= _options.MinimumDistance && distance.LightYears <= _options.MaximumDistance)
+                    await _resultWriterProxy.WriteResultAsync(distance);
             }
         }
     }

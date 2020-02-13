@@ -11,6 +11,7 @@ namespace EDSphereCalculator.Mappers
         public Star Convert(CmdOptions source, Star destination, ResolutionContext context)
         {
             destination = new Star();
+            destination.Name = source.StartSystemName;
             destination.Coordinates = new StarCoordinates
             {
                 X = source.X,

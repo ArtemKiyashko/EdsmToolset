@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CommandLine;
 using EDSphereCalculator.CalculatorModels;
+using EDSphereCalculator.Extensions;
 using EDSphereCalculator.Mappers;
 using EDSphereCalculator.ResultWriters;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,9 +29,7 @@ namespace EDSphereCalculator
             _serviceProvider = new ServiceCollection()
                 .AddSingleton(options)
                 .AddTransient<Calculator>()
-                .AddTransient<IResultWriter<Star>, ConsoleWriter>()
-                .AddTransient<IResultWriter<Star>, CsvResultWriter>()
-                .AddTransient<IResultWriterProxy<Star>, DefaultResultWriterProxy>()
+                .AddDistanceResultWriters(options)
                 .AddAutoMapper(typeof(MapperProfile))
                 .AddTransient(typeof(IDataReader<>), typeof(DefaultDataReader<>))
                 .BuildServiceProvider();

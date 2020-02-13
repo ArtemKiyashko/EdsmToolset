@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace EDSphereCalculator.ResultWriters
 {
-    public class ConsoleWriter : IResultWriter<Star>
+    public class ConsoleDistanceWriter : IResultWriter<Distance>
     {
-        public Task WriteResultAsync(Star result)
+        public Task WriteResultAsync(Distance result)
         {
-            Console.WriteLine($"{result}: Distance from: {result.DistanceFrom} - {result.Distance}");
+            Console.WriteLine($"{result.DistanceTo}: Distance from: {result.DistanceFrom} - {result.LightYears}");
             return Task.CompletedTask;
         }
     }

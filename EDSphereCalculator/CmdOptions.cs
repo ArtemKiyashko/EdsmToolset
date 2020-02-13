@@ -20,13 +20,16 @@ namespace EDSphereCalculator
         [Option('z', Default = 0, HelpText = "Set Z coordinate of starting system")]
         public double Z { get; set; }
 
+        [Option("startSystemName", Required = false, HelpText = "Set start system name. That name will be used only in report. Calculation will be done based on coordinates")]
+        public string StartSystemName { get; set; }
+
         [Option("maxDist", Required = true, HelpText = "Set maximum sphere radius for search in LY")]
         public double MaximumDistance { get; set; }
 
         [Option("minDist", Required = true, HelpText = "Set minimum sphere radius for search in LY")]
         public double MinimumDistance { get; set; }
 
-        [Option("csv", Required = false, HelpText = "Set output path and filename for result CSV")]
-        public string CsvOutputPath { get; set; }
+        [Option("csvDistance", Required = false, HelpText = "Set output path and filename for result CSV with distance report")]
+        public string CsvDistanceOutputPath { get; set; }
     }
 }

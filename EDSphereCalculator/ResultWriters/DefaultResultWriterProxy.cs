@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace EDSphereCalculator.ResultWriters
 {
-    public class DefaultResultWriterProxy : IResultWriterProxy<Star>
+    public class DefaultResultWriterProxy<T> : IResultWriterProxy<T>
     {
-        private readonly IEnumerable<IResultWriter<Star>> _resultWriters;
+        private readonly IEnumerable<IResultWriter<T>> _resultWriters;
 
-        public DefaultResultWriterProxy(IEnumerable<IResultWriter<Star>> resultWriters)
+        public DefaultResultWriterProxy(IEnumerable<IResultWriter<T>> resultWriters)
         {
             _resultWriters = resultWriters;
         }
 
-        public async Task WriteResultAsync(Star result)
+        public async Task WriteResultAsync(T result)
         {
             await _resultWriters.ForEachAsync(async _ => await _.WriteResultAsync(result));
         }

@@ -1,4 +1,5 @@
 ﻿using CsvHelper;
+using CsvHelper.Configuration;
 using EDSphereCalculator.CalculatorModels;
 using EDSphereCalculator.Mappers;
 using System;
@@ -10,27 +11,29 @@ using System.Threading.Tasks;
 
 namespace EDSphereCalculator.ResultWriters
 {
-    public class CsvResultWriter : IResultWriter<Star>, IDisposable
+    public class CsvResultWriter<T1, T2> : IResultWriter<T1>, IDisposable 
+        where T1 : new()
+        where T2 : ClassMap
     {
-        private readonly CmdOptions _options;
         private readonly StreamWriter _streamWriter;
         private readonly CsvWriter _csvWriter;
         private readonly bool _isEnabled = true;
         private object _lockObject = new object();
+        private readonly string _outputPath;
 
-        public CsvResultWriter(CmdOptions options)
+        public CsvResultWriter(string outputPath)
         {
-            _options = options;
-            if (string.IsNullOrEmpty(_options.CsvOutputPath))
+            _outputPath = outputPath;
+            if (string.IsNullOrEmpty(_outputPath))
             {
                 _isEnabled = false;
                 return;
             }
-            _streamWriter = new StreamWriter(_options.CsvOutputPath);
+            _streamWriter = new StreamWriter(_outputPath);
             _streamWriter.AutoFlush = true;
             _csvWriter = new CsvWriter(_streamWriter, CultureInfo.InvariantCulture);
-            _csvWriter.Configuration.RegisterClassMap<CsvMap>();
-            _csvWriter.WriteHeader<Star>();
+            _csvWriter.Configuration.RegisterClassMap<T2>();
+            _csvWriter.WriteHeader<T1>();
             _csvWriter.NextRecord();
         }
 
@@ -44,7 +47,7 @@ namespace EDSphereCalculator.ResultWriters
             _csvWriter.Dispose();
         }
 
-        public Task WriteResultAsync(Star result)
+        public Task WriteResultAsync(T1 result)
         {
             if (!_isEnabled)
                 return Task.CompletedTask;
