@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using CommandLine;
-using EDSphereCalculator.CalculatorModels;
 using EDSphereCalculator.Extensions;
 using EDSphereCalculator.Mappers;
-using EDSphereCalculator.ResultWriters;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,8 +17,18 @@ namespace EDSphereCalculator
     {
         private static Calculator _calculator;
         private static IServiceProvider _serviceProvider;
+        private static IServiceCollection _serviceCollection;
+        private static IConfigurationRoot _configuration;
         static void Main(string[] args)
         {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            
+            _configuration = builder.Build();
+            
+            _serviceCollection = new ServiceCollection();
+
             Parser.Default.ParseArguments<CmdOptions>(args)
                 .WithParsed(RunApplication);
             Console.WriteLine("Press any key to stop");
@@ -26,12 +37,17 @@ namespace EDSphereCalculator
 
         private static async void RunApplication(CmdOptions options)
         {
-            _serviceProvider = new ServiceCollection()
+            _serviceProvider = _serviceCollection
                 .AddSingleton(options)
                 .AddTransient<Calculator>()
                 .AddDistanceResultWriters(options)
                 .AddAutoMapper(typeof(MapperProfile))
                 .AddTransient(typeof(IDataReader<>), typeof(DefaultDataReader<>))
+                .AddDbContext<EdsmDbContext>(dbOptions =>
+                {
+                    dbOptions.UseLazyLoadingProxies();
+                    dbOptions.UseSqlServer(_configuration.GetConnectionString("Default"));
+                })
                 .BuildServiceProvider();
 
             using var scope = _serviceProvider.CreateScope();

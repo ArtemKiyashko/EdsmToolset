@@ -4,10 +4,10 @@ using System.Text;
 
 namespace EDSphereCalculator.CalculatorModels
 {
-    public class Distance
+    public class Distance : BaseModel
     {
-        public Star DistanceFrom { get; set; }
-        public Star DistanceTo { get; set; }
+        public virtual Star DistanceFrom { get; set; }
+        public virtual Star DistanceTo { get; set; }
         public double LightYears { get; set; }
     }
 }

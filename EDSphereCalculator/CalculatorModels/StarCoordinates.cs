@@ -5,7 +5,7 @@ using System.Text;
 
 namespace EDSphereCalculator.CalculatorModels
 {
-    public class StarCoordinates
+    public class StarCoordinates : BaseModel
     {
         public double X { get; set; }
         public double Y { get; set; }

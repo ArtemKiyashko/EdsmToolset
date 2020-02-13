@@ -5,11 +5,8 @@ using System.Text;
 
 namespace EDSphereCalculator.CalculatorModels
 {
-    public class Star
+    public class Star : BaseModel
     {
-        [JsonProperty("id")]
-        public int Id { get; set; }
-
         [JsonProperty("id64")]
         public long? Id64 { get; set; }
 
@@ -20,7 +17,9 @@ namespace EDSphereCalculator.CalculatorModels
         public DateTime Date { get; set; }
 
         [JsonProperty("coords")]
-        public StarCoordinates Coordinates { get; set; }
+        public virtual StarCoordinates Coordinates { get; set; }
+
+        public virtual ICollection<CelestialBody> Bodies { get; set; }
 
         public override string ToString()
         {
