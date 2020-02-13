@@ -18,12 +18,17 @@ namespace EDSphereCalculator
         private readonly CmdOptions _options;
         private readonly IResultWriterProxy<Star> _resultWriterProxy;
         private readonly IMapper _mapper;
+        private readonly IDataReader<Star> _dataReader;
 
-        public Calculator(CmdOptions options, IResultWriterProxy<Star> resultWriterProxy, IMapper mapper)
+        public Calculator(CmdOptions options,
+            IResultWriterProxy<Star> resultWriterProxy,
+            IMapper mapper,
+            IDataReader<Star> dataReader)
         {
             _options = options;
             _resultWriterProxy = resultWriterProxy;
             _mapper = mapper;
+            _dataReader = dataReader;
         }
 
         public void CalculateDistance(Star from, Star to)
@@ -39,60 +44,15 @@ namespace EDSphereCalculator
             from.Distance = distance;
         }
 
-        public IEnumerable<Star> RunProcessingParallel()
+        public async Task RunProcessingAsync()
         {
             var initialStar = _mapper.Map<Star>(_options);
-            var result = new BlockingCollection<Star>();
-            Parallel.ForEach(File.ReadLines(_options.EdsmDataPath), async (line) => {
-                using(var stReader = new StringReader(line))
-                using (var reader = new JsonTextReader(stReader))
-                {
-                    reader.SupportMultipleContent = true;
-                    var serializer = new JsonSerializer();
-                    while (await reader.ReadAsync())
-                    {
-                        if (reader.TokenType == JsonToken.StartObject)
-                        {
-                            var currentStar = serializer.Deserialize<Star>(reader);
-                            CalculateDistance(initialStar, currentStar);
-                            if (currentStar.Distance >= _options.MinimumDistance && currentStar.Distance <= _options.MaximumDistance)
-                            {
-                                await _resultWriterProxy.WriteResultAsync(currentStar);
-                                result.Add(currentStar);
-                            }
-                        }
-                    }
-                }
-            });
-
-            return result;
-        }
-
-        public async Task<IEnumerable<Star>> RunProcessingAsync()
-        {
-            var initialStar = _mapper.Map<Star>(_options);
-            var result = new List<Star>();
-            using (var stream = new StreamReader(_options.EdsmDataPath))
-            using (var reader = new JsonTextReader(stream))
+            while (await _dataReader.ReadAsync())
             {
-                reader.SupportMultipleContent = true;
-                var serializer = new JsonSerializer();
-
-                while (await reader.ReadAsync())
-                {
-                    if (reader.TokenType == JsonToken.StartObject)
-                    {
-                        var currentStar = serializer.Deserialize<Star>(reader);
-                        CalculateDistance(initialStar, currentStar);
-                        if (currentStar.Distance >= _options.MinimumDistance && currentStar.Distance <= _options.MaximumDistance)
-                        {
-                            await _resultWriterProxy.WriteResultAsync(currentStar);
-                            result.Add(currentStar);
-                        }
-                    }
-                }
+                CalculateDistance(initialStar, _dataReader.Result);
+                if (_dataReader.Result.Distance >= _options.MinimumDistance && _dataReader.Result.Distance <= _options.MaximumDistance)
+                    await _resultWriterProxy.WriteResultAsync(_dataReader.Result);
             }
-            return result;
         }
     }
 }

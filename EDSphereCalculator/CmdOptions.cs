@@ -8,8 +8,8 @@ namespace EDSphereCalculator
 {
     public class CmdOptions
     {
-        [Option('d', "data", Required = true, HelpText = "Set path to EDSM night dump file woth stars and coordinates")]
-        public string EdsmDataPath { get; set; }
+        [Option('s', "systemsWithCoordinates", Required = true, HelpText = "Set path to EDSM night dump file wih stars and coordinates")]
+        public string EdsmStarDataPath { get; set; }
 
         [Option('x', Default = 0, HelpText = "Set X coordinate of starting system")]
         public double X { get; set; }

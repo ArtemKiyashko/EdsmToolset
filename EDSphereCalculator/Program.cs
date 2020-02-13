@@ -32,6 +32,7 @@ namespace EDSphereCalculator
                 .AddTransient<IResultWriter<Star>, CsvResultWriter>()
                 .AddTransient<IResultWriterProxy<Star>, DefaultResultWriterProxy>()
                 .AddAutoMapper(typeof(MapperProfile))
+                .AddTransient(typeof(IDataReader<>), typeof(DefaultDataReader<>))
                 .BuildServiceProvider();
 
             using var scope = _serviceProvider.CreateScope();
