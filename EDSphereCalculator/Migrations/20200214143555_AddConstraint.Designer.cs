@@ -4,14 +4,16 @@ using EDSphereCalculator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EDSphereCalculator.Migrations
 {
     [DbContext(typeof(EdsmDbContext))]
-    partial class EdsmDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200214143555_AddConstraint")]
+    partial class AddConstraint
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -138,7 +140,7 @@ namespace EDSphereCalculator.Migrations
 
                     b.HasIndex("EdSystemId");
 
-                    b.ToTable("CelestialBodies");
+                    b.ToTable("CelestialBody");
                 });
 
             modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodyAtmosphereComposition", b =>
@@ -161,10 +163,10 @@ namespace EDSphereCalculator.Migrations
 
                     b.HasIndex("BodyId");
 
-                    b.ToTable("CelestialBodyAtmosphereCompositions");
+                    b.ToTable("CelestialBodyAtmosphereComposition");
                 });
 
-            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodyMaterial", b =>
+            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodyMaterials", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -207,7 +209,7 @@ namespace EDSphereCalculator.Migrations
 
                     b.HasIndex("BodyId");
 
-                    b.ToTable("CelestialBodyParens");
+                    b.ToTable("CelestialBodyParent");
                 });
 
             modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodyRing", b =>
@@ -239,7 +241,7 @@ namespace EDSphereCalculator.Migrations
 
                     b.HasIndex("BodyId");
 
-                    b.ToTable("CelestialBodyRings");
+                    b.ToTable("CelestialBodyRing");
                 });
 
             modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodySolidComposition", b =>
@@ -262,7 +264,7 @@ namespace EDSphereCalculator.Migrations
 
                     b.HasIndex("BodyId");
 
-                    b.ToTable("CelestialBodySolidCompositios");
+                    b.ToTable("CelestialBodySolidComposition");
                 });
 
             modelBuilder.Entity("EDSphereCalculator.CalculatorModels.Distance", b =>
@@ -352,7 +354,7 @@ namespace EDSphereCalculator.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodyMaterial", b =>
+            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodyMaterials", b =>
                 {
                     b.HasOne("EDSphereCalculator.CalculatorModels.CelestialBody", "Body")
                         .WithMany("BodyMaterials")

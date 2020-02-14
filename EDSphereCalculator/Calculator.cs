@@ -18,12 +18,12 @@ namespace EDSphereCalculator
         private readonly CmdOptions _options;
         private readonly IResultWriterProxy<Distance> _resultWriterProxy;
         private readonly IMapper _mapper;
-        private readonly IDataReader<Star> _dataReader;
+        private readonly IDataReader<EdSystem> _dataReader;
 
         public Calculator(CmdOptions options,
             IResultWriterProxy<Distance> resultWriterProxy,
             IMapper mapper,
-            IDataReader<Star> dataReader)
+            IDataReader<EdSystem> dataReader)
         {
             _options = options;
             _resultWriterProxy = resultWriterProxy;
@@ -31,7 +31,7 @@ namespace EDSphereCalculator
             _dataReader = dataReader;
         }
 
-        public Distance CalculateDistance(Star from, Star to)
+        public Distance CalculateDistance(EdSystem from, EdSystem to)
         {
             var distance = Math.Sqrt(
                 Math.Pow((to.Coordinates.X - from.Coordinates.X), 2)
@@ -48,7 +48,7 @@ namespace EDSphereCalculator
 
         public async Task RunProcessingAsync()
         {
-            var initialStar = _mapper.Map<Star>(_options);
+            var initialStar = _mapper.Map<EdSystem>(_options);
             while (await _dataReader.ReadAsync())
             {
                 var distance = CalculateDistance(initialStar, _dataReader.Result);

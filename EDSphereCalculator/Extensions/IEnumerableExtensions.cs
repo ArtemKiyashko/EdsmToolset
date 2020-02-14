@@ -24,5 +24,10 @@ namespace EDSphereCalculator.Extensions
         {
             return source.Any() ? source : throw new ArgumentException("Sequence contains no elements");
         }
+
+        public static IEnumerable<T> OrEmptyIfNull<T>(this IEnumerable<T> source)
+        {
+            return source ?? Enumerable.Empty<T>();
+        }
     }
 }

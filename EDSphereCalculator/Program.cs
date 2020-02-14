@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CommandLine;
+using EDSphereCalculator.CalculatorModels;
 using EDSphereCalculator.Extensions;
 using EDSphereCalculator.Mappers;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ namespace EDSphereCalculator
     class Program
     {
         private static Calculator _calculator;
+        private static IDbImporter _dbImporter;
         private static IServiceProvider _serviceProvider;
         private static IServiceCollection _serviceCollection;
         private static IConfigurationRoot _configuration;
@@ -42,23 +44,27 @@ namespace EDSphereCalculator
                 .AddTransient<Calculator>()
                 .AddDistanceResultWriters(options)
                 .AddAutoMapper(typeof(MapperProfile))
-                .AddTransient(typeof(IDataReader<>), typeof(DefaultDataReader<>))
+                .AddTransient<IDataReader<EdSystem>>((_) => new DefaultDataReader<EdSystem>(options.EdsmStarDataPath))
+                .AddTransient<IDataReader<CelestialBody>>((_) => new DefaultDataReader<CelestialBody>(options.EdsmBodiesDataPath))
                 .AddDbContext<EdsmDbContext>(dbOptions =>
                 {
                     dbOptions.UseLazyLoadingProxies();
                     dbOptions.UseSqlServer(_configuration.GetConnectionString("Default"));
                 })
+                .AddTransient<DefaultDbImporter>()
                 .BuildServiceProvider();
 
             using var scope = _serviceProvider.CreateScope();
-            _calculator = scope.ServiceProvider.GetService<Calculator>();
-            var st = new Stopwatch();
-            st.Start();
-            await _calculator.RunProcessingAsync();
-            st.Stop();
-            var ts = st.Elapsed;
-            Console.WriteLine("Async Processing. Elapsed Time is {0:00}:{1:00}:{2:00}.{3}",
-                        ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds);
+            _dbImporter = scope.ServiceProvider.GetService<DefaultDbImporter>();
+            await _dbImporter.ImportSystemsAsync();
+            //_calculator = scope.ServiceProvider.GetService<Calculator>();
+            //var st = new Stopwatch();
+            //st.Start();
+            //await _calculator.RunProcessingAsync();
+            //st.Stop();
+            //var ts = st.Elapsed;
+            //Console.WriteLine("Async Processing. Elapsed Time is {0:00}:{1:00}:{2:00}.{3}",
+            //            ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds);
             Console.WriteLine("Done");
         }
     }

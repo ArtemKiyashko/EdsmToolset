@@ -2,7 +2,7 @@
   "profiles": {
     "EDSphereCalculator": {
       "commandName": "Project",
-      "commandLineArgs": "-s \"C:\\repos\\EDSphereCalculator\\data\\systemsWithCoordinates.json\" --maxDist 30 --minDist 3 --csvDistance \"C:\\repos\\EDSphereCalculator\\data\\result.csv\" --startSystemName \"Sol\""
+      "commandLineArgs": "-s \"E:\\ed_data\\systemsWithCoordinates.json\" --maxDist 30 --minDist 3 --csvDistance \"C:\\repos\\EDSphereCalculator\\data\\result.csv\" --startSystemName \"Sol\" --bodies \"E:\\ed_data\\bodies.json\""
     }
   }
 }

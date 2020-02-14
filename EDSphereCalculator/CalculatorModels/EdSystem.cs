@@ -6,7 +6,7 @@ using System.Text;
 
 namespace EDSphereCalculator.CalculatorModels
 {
-    public class Star : BaseModel
+    public class EdSystem : BaseModel
     {
         [JsonProperty("id")]
         public int EdsmId { get; set; }
@@ -21,7 +21,7 @@ namespace EDSphereCalculator.CalculatorModels
         public DateTime Date { get; set; }
 
         [JsonProperty("coords")]
-        public virtual StarCoordinates Coordinates { get; set; }
+        public virtual EdSystemCoordinates Coordinates { get; set; }
 
         public virtual ICollection<CelestialBody> Bodies { get; set; }
 

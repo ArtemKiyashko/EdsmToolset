@@ -6,13 +6,13 @@ using System.Text;
 
 namespace EDSphereCalculator.Mappers
 {
-    public class CmdOptionsToStarMapper : ITypeConverter<CmdOptions, Star>
+    public class CmdOptionsToEdSystemMapper : ITypeConverter<CmdOptions, EdSystem>
     {
-        public Star Convert(CmdOptions source, Star destination, ResolutionContext context)
+        public EdSystem Convert(CmdOptions source, EdSystem destination, ResolutionContext context)
         {
-            destination = new Star();
+            destination = new EdSystem();
             destination.Name = source.StartSystemName;
-            destination.Coordinates = new StarCoordinates
+            destination.Coordinates = new EdSystemCoordinates
             {
                 X = source.X,
                 Y = source.Y,

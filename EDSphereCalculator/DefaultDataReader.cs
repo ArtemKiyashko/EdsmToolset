@@ -10,16 +10,16 @@ namespace EDSphereCalculator
 {
     public class DefaultDataReader<T> : IDataReader<T>, IDisposable where T : new()
     {
-        private readonly CmdOptions _options;
+        private readonly string _filePath;
         private readonly StreamReader _streamReader;
         private readonly JsonTextReader _jsonReader;
         private readonly JsonSerializer _serializer;
         public T Result { get; private set; }
 
-        public DefaultDataReader(CmdOptions options)
+        public DefaultDataReader(string filePath)
         {
-            _options = options;
-            _streamReader = new StreamReader(_options.EdsmStarDataPath);
+            _filePath = filePath;
+            _streamReader = new StreamReader(filePath);
             _jsonReader = new JsonTextReader(_streamReader);
             _jsonReader.SupportMultipleContent = true;
             _serializer = new JsonSerializer();
@@ -33,7 +33,7 @@ namespace EDSphereCalculator
 
         public async Task<bool> ReadAsync()
         {
-            while(await _jsonReader.ReadAsync())
+            while (await _jsonReader.ReadAsync())
             {
                 if (_jsonReader.TokenType == JsonToken.StartObject)
                 {

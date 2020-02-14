@@ -9,7 +9,7 @@ namespace EDSphereCalculator.Mappers
     {
         public MapperProfile()
         {
-            CreateMap<CmdOptions, Star>().ConvertUsing<CmdOptionsToStarMapper>();
+            CreateMap<CmdOptions, EdSystem>().ConvertUsing<CmdOptionsToEdSystemMapper>();
         }
     }
 }

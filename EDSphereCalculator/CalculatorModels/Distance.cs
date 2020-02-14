@@ -8,9 +8,9 @@ namespace EDSphereCalculator.CalculatorModels
 {
     public class Distance
     {
-        public virtual Star DistanceFrom { get; set; }
+        public virtual EdSystem DistanceFrom { get; set; }
         public int DistanceFromId { get; set; }
-        public virtual Star DistanceTo { get; set; }
+        public virtual EdSystem DistanceTo { get; set; }
         public int DistanceToId { get; set; }
         public double LightYears { get; set; }
     }
