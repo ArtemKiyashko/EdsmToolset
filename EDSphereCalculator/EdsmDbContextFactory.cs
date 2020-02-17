@@ -21,7 +21,7 @@ namespace EDSphereCalculator
             var optionsBuilder = new DbContextOptionsBuilder<EdsmDbContext>();
             optionsBuilder
                 .UseLazyLoadingProxies()
-                .UseSqlServer(configuration.GetConnectionString("Default"));
+                .UseNpgsql(configuration.GetConnectionString("Postgre"), sqlOptions => sqlOptions.CommandTimeout(1800));
 
             return new EdsmDbContext(optionsBuilder.Options);
         }

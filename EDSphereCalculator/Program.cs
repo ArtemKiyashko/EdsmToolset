@@ -3,6 +3,7 @@ using CommandLine;
 using EDSphereCalculator.CalculatorModels;
 using EDSphereCalculator.Extensions;
 using EDSphereCalculator.Mappers;
+using EDSphereCalculator.ResultWriters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,27 +45,35 @@ namespace EDSphereCalculator
                 .AddTransient<Calculator>()
                 .AddDistanceResultWriters(options)
                 .AddAutoMapper(typeof(MapperProfile))
-                .AddTransient<IDataReader<EdSystem>>((_) => new DefaultDataReader<EdSystem>(options.EdsmStarDataPath))
-                .AddTransient<IDataReader<CelestialBody>>((_) => new DefaultDataReader<CelestialBody>(options.EdsmBodiesDataPath))
+                .AddTransient<IResultWriter<string>, ConsoleDefaultWriter>()
+                .AddTransient<IDataReader<EdSystem>>((_) => new DefaultDataReader<EdSystem>(options.EdsmStarDataPath, _.GetService<IResultWriter<string>>()))
+                .AddTransient<IDataReader<CelestialBody>>((_) => new DefaultDataReader<CelestialBody>(options.EdsmBodiesDataPath, _.GetService<IResultWriter<string>>()))
                 .AddDbContext<EdsmDbContext>(dbOptions =>
                 {
                     dbOptions.UseLazyLoadingProxies();
-                    dbOptions.UseSqlServer(_configuration.GetConnectionString("Default"));
+                    dbOptions.UseNpgsql(_configuration.GetConnectionString("Postgre"), sqlOptions => sqlOptions.CommandTimeout(1800));
                 })
                 .AddTransient<DefaultDbImporter>()
                 .BuildServiceProvider();
 
             using var scope = _serviceProvider.CreateScope();
             _dbImporter = scope.ServiceProvider.GetService<DefaultDbImporter>();
+            var st = new Stopwatch();
+            st.Start();
             await _dbImporter.ImportSystemsAsync();
-            //_calculator = scope.ServiceProvider.GetService<Calculator>();
-            //var st = new Stopwatch();
-            //st.Start();
-            //await _calculator.RunProcessingAsync();
-            //st.Stop();
-            //var ts = st.Elapsed;
-            //Console.WriteLine("Async Processing. Elapsed Time is {0:00}:{1:00}:{2:00}.{3}",
-            //            ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds);
+            st.Stop();
+            var ts = st.Elapsed;
+            Console.WriteLine("Import EdSystems. Elapsed Time is {0:00}:{1:00}:{2:00}.{3}",
+                        ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds);
+
+            var st1 = new Stopwatch();
+            st1.Start();
+            await _dbImporter.ImportBodiesAsync();
+            st1.Stop();
+            var ts1 = st1.Elapsed;
+            Console.WriteLine("Import Celestial Bodies. Elapsed Time is {0:00}:{1:00}:{2:00}.{3}",
+                        ts1.Hours, ts1.Minutes, ts1.Seconds, ts1.Milliseconds);
+
             Console.WriteLine("Done");
         }
     }

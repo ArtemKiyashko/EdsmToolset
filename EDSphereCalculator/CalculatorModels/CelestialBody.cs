@@ -11,7 +11,7 @@ namespace EDSphereCalculator.CalculatorModels
     public class CelestialBody : BaseModel
     {
         [JsonProperty("id")]
-        public int EdsmId { get; set; }
+        public long EdsmId { get; set; }
         [JsonProperty("id64")]
         public long? EdsmId64 { get; set; }
         [JsonProperty("bodyId")]
@@ -58,13 +58,13 @@ namespace EDSphereCalculator.CalculatorModels
         [JsonProperty("rotationalPeriod")]
         public double? RotationalPeriod { get; set; }
         [JsonProperty("rotationalPeriodTidallyLocked")]
-        public bool? RotationalPeriodTidallyLocked { get; set; }
+        public bool RotationalPeriodTidallyLocked { get; set; }
         [JsonProperty("axialTilt")]
         public double? AxialTilt { get; set; }
         [JsonProperty("updateTime")]
         public DateTime UpdateTime { get; set; }
         [JsonProperty("systemId")]
-        public int EdSystemId { get; set; }
+        public long EdSystemId { get; set; }
         [JsonProperty("systemId64")]
         public long? EdSystemId64 { get; set; }
         [JsonProperty("isMainStar")]
@@ -83,9 +83,15 @@ namespace EDSphereCalculator.CalculatorModels
         public double? SolarMasses { get; set; }
         [JsonProperty("solarRadius")]
         public double? SolarRadius { get; set; }
+        [JsonProperty("systemName")]
+        public string EdSystemName { get; set; }
+        [JsonProperty("reserveLevel")]
+        public string ReserveLevel { get; set; }
 
         [JsonProperty("rings")]
         public virtual ICollection<CelestialBodyRing> Rings { get; set; }
+        [JsonProperty("belts")]
+        public virtual ICollection<CelestialBodyBelt> Belts { get; set; }
 
         [NotMapped]
         [JsonProperty("parents")]
@@ -113,6 +119,7 @@ namespace EDSphereCalculator.CalculatorModels
         [JsonIgnore]
         public virtual ICollection<CelestialBodyMaterial> BodyMaterials { get; set; }
         [JsonIgnore]
+        [NotMapped]
         public virtual EdSystem EdSystem { get; set; }
     }
 }

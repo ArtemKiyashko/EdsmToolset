@@ -6,7 +6,7 @@ using System.Text;
 
 namespace EDSphereCalculator.CalculatorModels
 {
-    public class CelestialBodyRing : BaseModel
+    public class CelestialBodyBelt : BaseModel
     {
         [JsonProperty("name")]
         public string Name { get; set; }

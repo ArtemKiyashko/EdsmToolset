@@ -1,9 +1,10 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace EDSphereCalculator.Migrations
 {
-    public partial class CreateEdsmDb : Migration
+    public partial class CreateDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,8 +12,8 @@ namespace EDSphereCalculator.Migrations
                 name: "EdSystemCoordinates",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     X = table.Column<double>(nullable: false),
                     Y = table.Column<double>(nullable: false),
                     Z = table.Column<double>(nullable: false)
@@ -26,13 +27,13 @@ namespace EDSphereCalculator.Migrations
                 name: "EdSystems",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EdsmId = table.Column<int>(nullable: false),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    EdsmId = table.Column<long>(nullable: false),
                     EdsmId64 = table.Column<long>(nullable: true),
                     Name = table.Column<string>(nullable: false),
                     Date = table.Column<DateTime>(nullable: false),
-                    CoordinatesId = table.Column<int>(nullable: true)
+                    CoordinatesId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -46,12 +47,12 @@ namespace EDSphereCalculator.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CelestialBody",
+                name: "CelestialBodies",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EdsmId = table.Column<int>(nullable: false),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    EdsmId = table.Column<long>(nullable: false),
                     EdsmId64 = table.Column<long>(nullable: true),
                     EdsmBodyId = table.Column<int>(nullable: true),
                     Name = table.Column<string>(nullable: false),
@@ -73,10 +74,10 @@ namespace EDSphereCalculator.Migrations
                     OrbitalInclination = table.Column<double>(nullable: true),
                     ArgOfPeriapsis = table.Column<double>(nullable: true),
                     RotationalPeriod = table.Column<double>(nullable: true),
-                    RotationalPeriodTidallyLocked = table.Column<bool>(nullable: true),
+                    RotationalPeriodTidallyLocked = table.Column<bool>(nullable: false),
                     AxialTilt = table.Column<double>(nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: false),
-                    EdSystemId = table.Column<int>(nullable: false),
+                    EdSystemId = table.Column<long>(nullable: false),
                     EdSystemId64 = table.Column<long>(nullable: true),
                     IsMainStar = table.Column<bool>(nullable: true),
                     IsScoopable = table.Column<bool>(nullable: true),
@@ -85,13 +86,15 @@ namespace EDSphereCalculator.Migrations
                     Luminosity = table.Column<string>(nullable: true),
                     AbsoluteMagnitude = table.Column<double>(nullable: true),
                     SolarMasses = table.Column<double>(nullable: true),
-                    SolarRadius = table.Column<double>(nullable: true)
+                    SolarRadius = table.Column<double>(nullable: true),
+                    EdSystemName = table.Column<string>(nullable: true),
+                    ReserveLevel = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CelestialBody", x => x.Id);
+                    table.PrimaryKey("PK_CelestialBodies", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CelestialBody_EdSystems_EdSystemId",
+                        name: "FK_CelestialBodies_EdSystems_EdSystemId",
                         column: x => x.EdSystemId,
                         principalTable: "EdSystems",
                         principalColumn: "Id",
@@ -104,141 +107,172 @@ namespace EDSphereCalculator.Migrations
                 {
                     DistanceFromId = table.Column<int>(nullable: false),
                     DistanceToId = table.Column<int>(nullable: false),
+                    DistanceFromId1 = table.Column<long>(nullable: true),
+                    DistanceToId1 = table.Column<long>(nullable: true),
                     LightYears = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Distances", x => new { x.DistanceFromId, x.DistanceToId });
                     table.ForeignKey(
-                        name: "FK_Distances_EdSystems_DistanceFromId",
-                        column: x => x.DistanceFromId,
+                        name: "FK_Distances_EdSystems_DistanceFromId1",
+                        column: x => x.DistanceFromId1,
                         principalTable: "EdSystems",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Distances_EdSystems_DistanceToId",
-                        column: x => x.DistanceToId,
+                        name: "FK_Distances_EdSystems_DistanceToId1",
+                        column: x => x.DistanceToId1,
                         principalTable: "EdSystems",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CelestialBodyAtmosphereComposition",
+                name: "CelestialBodyAtmosphereCompositions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Key = table.Column<string>(nullable: true),
                     Value = table.Column<decimal>(nullable: false),
-                    BodyId = table.Column<int>(nullable: true)
+                    BodyId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CelestialBodyAtmosphereComposition", x => x.Id);
+                    table.PrimaryKey("PK_CelestialBodyAtmosphereCompositions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CelestialBodyAtmosphereComposition_CelestialBody_BodyId",
+                        name: "FK_CelestialBodyAtmosphereCompositions_CelestialBodies_BodyId",
                         column: x => x.BodyId,
-                        principalTable: "CelestialBody",
+                        principalTable: "CelestialBodies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CelestialBodyBelts",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(nullable: true),
+                    Type = table.Column<string>(nullable: true),
+                    Mass = table.Column<long>(nullable: false),
+                    InnerRadius = table.Column<long>(nullable: false),
+                    OuterRadius = table.Column<long>(nullable: false),
+                    BodyId = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CelestialBodyBelts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CelestialBodyBelts_CelestialBodies_BodyId",
+                        column: x => x.BodyId,
+                        principalTable: "CelestialBodies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "CelestialBodyMaterials",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Key = table.Column<string>(nullable: true),
                     Value = table.Column<decimal>(nullable: false),
-                    BodyId = table.Column<int>(nullable: true)
+                    BodyId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CelestialBodyMaterials", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CelestialBodyMaterials_CelestialBody_BodyId",
+                        name: "FK_CelestialBodyMaterials_CelestialBodies_BodyId",
                         column: x => x.BodyId,
-                        principalTable: "CelestialBody",
+                        principalTable: "CelestialBodies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CelestialBodyParent",
+                name: "CelestialBodyParents",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Key = table.Column<string>(nullable: true),
                     Value = table.Column<int>(nullable: false),
-                    BodyId = table.Column<int>(nullable: true)
+                    BodyId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CelestialBodyParent", x => x.Id);
+                    table.PrimaryKey("PK_CelestialBodyParents", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CelestialBodyParent_CelestialBody_BodyId",
+                        name: "FK_CelestialBodyParents_CelestialBodies_BodyId",
                         column: x => x.BodyId,
-                        principalTable: "CelestialBody",
+                        principalTable: "CelestialBodies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CelestialBodyRing",
+                name: "CelestialBodyRings",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(nullable: true),
                     Type = table.Column<string>(nullable: true),
                     Mass = table.Column<long>(nullable: false),
                     InnerRadius = table.Column<long>(nullable: false),
                     OuterRadius = table.Column<long>(nullable: false),
-                    BodyId = table.Column<int>(nullable: true)
+                    BodyId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CelestialBodyRing", x => x.Id);
+                    table.PrimaryKey("PK_CelestialBodyRings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CelestialBodyRing_CelestialBody_BodyId",
+                        name: "FK_CelestialBodyRings_CelestialBodies_BodyId",
                         column: x => x.BodyId,
-                        principalTable: "CelestialBody",
+                        principalTable: "CelestialBodies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CelestialBodySolidComposition",
+                name: "CelestialBodySolidCompositios",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Key = table.Column<string>(nullable: true),
                     Value = table.Column<decimal>(nullable: false),
-                    BodyId = table.Column<int>(nullable: true)
+                    BodyId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CelestialBodySolidComposition", x => x.Id);
+                    table.PrimaryKey("PK_CelestialBodySolidCompositios", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CelestialBodySolidComposition_CelestialBody_BodyId",
+                        name: "FK_CelestialBodySolidCompositios_CelestialBodies_BodyId",
                         column: x => x.BodyId,
-                        principalTable: "CelestialBody",
+                        principalTable: "CelestialBodies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CelestialBody_EdSystemId",
-                table: "CelestialBody",
+                name: "IX_CelestialBodies_EdSystemId",
+                table: "CelestialBodies",
                 column: "EdSystemId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CelestialBodyAtmosphereComposition_BodyId",
-                table: "CelestialBodyAtmosphereComposition",
+                name: "IX_CelestialBodyAtmosphereCompositions_BodyId",
+                table: "CelestialBodyAtmosphereCompositions",
+                column: "BodyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CelestialBodyBelts_BodyId",
+                table: "CelestialBodyBelts",
                 column: "BodyId");
 
             migrationBuilder.CreateIndex(
@@ -247,24 +281,29 @@ namespace EDSphereCalculator.Migrations
                 column: "BodyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CelestialBodyParent_BodyId",
-                table: "CelestialBodyParent",
+                name: "IX_CelestialBodyParents_BodyId",
+                table: "CelestialBodyParents",
                 column: "BodyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CelestialBodyRing_BodyId",
-                table: "CelestialBodyRing",
+                name: "IX_CelestialBodyRings_BodyId",
+                table: "CelestialBodyRings",
                 column: "BodyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CelestialBodySolidComposition_BodyId",
-                table: "CelestialBodySolidComposition",
+                name: "IX_CelestialBodySolidCompositios_BodyId",
+                table: "CelestialBodySolidCompositios",
                 column: "BodyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Distances_DistanceToId",
+                name: "IX_Distances_DistanceFromId1",
                 table: "Distances",
-                column: "DistanceToId");
+                column: "DistanceFromId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Distances_DistanceToId1",
+                table: "Distances",
+                column: "DistanceToId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EdSystems_CoordinatesId",
@@ -275,25 +314,28 @@ namespace EDSphereCalculator.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CelestialBodyAtmosphereComposition");
+                name: "CelestialBodyAtmosphereCompositions");
+
+            migrationBuilder.DropTable(
+                name: "CelestialBodyBelts");
 
             migrationBuilder.DropTable(
                 name: "CelestialBodyMaterials");
 
             migrationBuilder.DropTable(
-                name: "CelestialBodyParent");
+                name: "CelestialBodyParents");
 
             migrationBuilder.DropTable(
-                name: "CelestialBodyRing");
+                name: "CelestialBodyRings");
 
             migrationBuilder.DropTable(
-                name: "CelestialBodySolidComposition");
+                name: "CelestialBodySolidCompositios");
 
             migrationBuilder.DropTable(
                 name: "Distances");
 
             migrationBuilder.DropTable(
-                name: "CelestialBody");
+                name: "CelestialBodies");
 
             migrationBuilder.DropTable(
                 name: "EdSystems");

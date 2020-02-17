@@ -9,5 +9,6 @@ namespace EDSphereCalculator.CalculatorModels
     {
         [Required]
         public virtual CelestialBody Body { get; set; }
+        public long BodyId { get; set; }
     }
 }

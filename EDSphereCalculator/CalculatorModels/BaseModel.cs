@@ -7,6 +7,6 @@ namespace EDSphereCalculator.CalculatorModels
 {
     public class BaseModel
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
     }
 }

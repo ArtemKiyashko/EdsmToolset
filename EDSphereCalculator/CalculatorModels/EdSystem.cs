@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace EDSphereCalculator.CalculatorModels
@@ -9,7 +10,7 @@ namespace EDSphereCalculator.CalculatorModels
     public class EdSystem : BaseModel
     {
         [JsonProperty("id")]
-        public int EdsmId { get; set; }
+        public long EdsmId { get; set; }
         [JsonProperty("id64")]
         public long? EdsmId64 { get; set; }
 

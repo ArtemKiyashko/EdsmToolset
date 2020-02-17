@@ -3,8 +3,8 @@ using System;
 using EDSphereCalculator;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace EDSphereCalculator.Migrations
 {
@@ -15,124 +15,130 @@ namespace EDSphereCalculator.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
                 .HasAnnotation("ProductVersion", "3.1.1")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBody", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<double?>("AbsoluteMagnitude")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<int?>("Age")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<double?>("ArgOfPeriapsis")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<string>("AtmosphereType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<double?>("AxialTilt")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<int>("DistanceToArrival")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<double?>("EarthMasses")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("EdSystemId")
-                        .HasColumnType("int");
+                    b.Property<long>("EdSystemId")
+                        .HasColumnType("bigint");
 
                     b.Property<long?>("EdSystemId64")
                         .HasColumnType("bigint");
 
-                    b.Property<int?>("EdsmBodyId")
-                        .HasColumnType("int");
+                    b.Property<string>("EdSystemName")
+                        .HasColumnType("text");
 
-                    b.Property<int>("EdsmId")
-                        .HasColumnType("int");
+                    b.Property<int?>("EdsmBodyId")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("EdsmId")
+                        .HasColumnType("bigint");
 
                     b.Property<long?>("EdsmId64")
                         .HasColumnType("bigint");
 
                     b.Property<double?>("Gravity")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<bool?>("IsLandable")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<bool?>("IsMainStar")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<bool?>("IsScoopable")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Luminosity")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<double?>("OrbitalEccentricity")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<double?>("OrbitalInclination")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<double?>("OrbitalPeriod")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<double?>("Radius")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("ReserveLevel")
+                        .HasColumnType("text");
 
                     b.Property<double?>("RotationalPeriod")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
-                    b.Property<bool?>("RotationalPeriodTidallyLocked")
-                        .HasColumnType("bit");
+                    b.Property<bool>("RotationalPeriodTidallyLocked")
+                        .HasColumnType("boolean");
 
                     b.Property<double?>("SemiMajorAxis")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<double?>("SolarMasses")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<double?>("SolarRadius")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<string>("SpectralClass")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("SubType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<double?>("SurfacePressure")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<int?>("SurfaceTemperature")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("TerraformingState")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("UpdateTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("VolcanismType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -143,19 +149,19 @@ namespace EDSphereCalculator.Migrations
 
             modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodyAtmosphereComposition", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("BodyId")
-                        .HasColumnType("int");
+                    b.Property<long>("BodyId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Key")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<decimal>("Value")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("numeric");
 
                     b.HasKey("Id");
 
@@ -164,21 +170,53 @@ namespace EDSphereCalculator.Migrations
                     b.ToTable("CelestialBodyAtmosphereCompositions");
                 });
 
+            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodyBelt", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<long>("BodyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("InnerRadius")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("Mass")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<long>("OuterRadius")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BodyId");
+
+                    b.ToTable("CelestialBodyBelts");
+                });
+
             modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodyMaterial", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("BodyId")
-                        .HasColumnType("int");
+                    b.Property<long>("BodyId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Key")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<decimal>("Value")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("numeric");
 
                     b.HasKey("Id");
 
@@ -189,36 +227,36 @@ namespace EDSphereCalculator.Migrations
 
             modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodyParent", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("BodyId")
-                        .HasColumnType("int");
+                    b.Property<long>("BodyId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Key")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("Value")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BodyId");
 
-                    b.ToTable("CelestialBodyParens");
+                    b.ToTable("CelestialBodyParents");
                 });
 
             modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodyRing", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("BodyId")
-                        .HasColumnType("int");
+                    b.Property<long>("BodyId")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("InnerRadius")
                         .HasColumnType("bigint");
@@ -227,13 +265,13 @@ namespace EDSphereCalculator.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<long>("OuterRadius")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -244,19 +282,19 @@ namespace EDSphereCalculator.Migrations
 
             modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodySolidComposition", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("BodyId")
-                        .HasColumnType("int");
+                    b.Property<long>("BodyId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Key")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<decimal>("Value")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("numeric");
 
                     b.HasKey("Id");
 
@@ -268,43 +306,51 @@ namespace EDSphereCalculator.Migrations
             modelBuilder.Entity("EDSphereCalculator.CalculatorModels.Distance", b =>
                 {
                     b.Property<int>("DistanceFromId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("DistanceToId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    b.Property<long?>("DistanceFromId1")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DistanceToId1")
+                        .HasColumnType("bigint");
 
                     b.Property<double>("LightYears")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.HasKey("DistanceFromId", "DistanceToId");
 
-                    b.HasIndex("DistanceToId");
+                    b.HasIndex("DistanceFromId1");
+
+                    b.HasIndex("DistanceToId1");
 
                     b.ToTable("Distances");
                 });
 
             modelBuilder.Entity("EDSphereCalculator.CalculatorModels.EdSystem", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int?>("CoordinatesId")
-                        .HasColumnType("int");
+                    b.Property<long?>("CoordinatesId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<int>("EdsmId")
-                        .HasColumnType("int");
+                    b.Property<long>("EdsmId")
+                        .HasColumnType("bigint");
 
                     b.Property<long?>("EdsmId64")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -315,19 +361,19 @@ namespace EDSphereCalculator.Migrations
 
             modelBuilder.Entity("EDSphereCalculator.CalculatorModels.EdSystemCoordinates", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("bigint")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<double>("X")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<double>("Y")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<double>("Z")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
@@ -336,7 +382,7 @@ namespace EDSphereCalculator.Migrations
 
             modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBody", b =>
                 {
-                    b.HasOne("EDSphereCalculator.CalculatorModels.EdSystem", "EdSystem")
+                    b.HasOne("EDSphereCalculator.CalculatorModels.EdSystem", null)
                         .WithMany("Bodies")
                         .HasForeignKey("EdSystemId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -347,6 +393,15 @@ namespace EDSphereCalculator.Migrations
                 {
                     b.HasOne("EDSphereCalculator.CalculatorModels.CelestialBody", "Body")
                         .WithMany("BodyAtmosphereCompositions")
+                        .HasForeignKey("BodyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodyBelt", b =>
+                {
+                    b.HasOne("EDSphereCalculator.CalculatorModels.CelestialBody", "Body")
+                        .WithMany("Belts")
                         .HasForeignKey("BodyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -392,15 +447,13 @@ namespace EDSphereCalculator.Migrations
                 {
                     b.HasOne("EDSphereCalculator.CalculatorModels.EdSystem", "DistanceFrom")
                         .WithMany("DistancesTo")
-                        .HasForeignKey("DistanceFromId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("DistanceFromId1")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("EDSphereCalculator.CalculatorModels.EdSystem", "DistanceTo")
                         .WithMany("DistancesFrom")
-                        .HasForeignKey("DistanceToId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DistanceToId1")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("EDSphereCalculator.CalculatorModels.EdSystem", b =>

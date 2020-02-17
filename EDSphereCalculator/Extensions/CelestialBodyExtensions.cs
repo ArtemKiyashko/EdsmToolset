@@ -1,6 +1,7 @@
 ﻿using EDSphereCalculator.CalculatorModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace EDSphereCalculator.Extensions
@@ -13,17 +14,24 @@ namespace EDSphereCalculator.Extensions
             celestialBody.BodyAtmosphereCompositions = new List<CelestialBodyAtmosphereComposition>();
             celestialBody.BodySolidCompositions = new List<CelestialBodySolidComposition>();
             celestialBody.BodyMaterials = new List<CelestialBodyMaterial>();
-            foreach (var entity in celestialBody.Parents.OrEmptyIfNull())
-            {
-                foreach(var entityKey in entity.Keys)
-                {
-                    celestialBody.BodyParents.Add(new CelestialBodyParent
+           
+            var currentParents = celestialBody.Parents.OrEmptyIfNull().SelectMany(_ => _);
+            var newParents = currentParents.GroupBy(d => d.Key)
+                .Select(
+                    g => new
                     {
-                        Body = celestialBody,
-                        Key = entityKey,
-                        Value = entity[entityKey]
+                        g.Key,
+                        Value = g.Sum(s => s.Value),
                     });
-                }
+
+            foreach (var entityKey in newParents)
+            {
+                celestialBody.BodyParents.Add(new CelestialBodyParent
+                {
+                    Body = celestialBody,
+                    Key = entityKey.Key,
+                    Value = entityKey.Value
+                });
             }
 
             foreach (var entity in celestialBody.AtmosphereCompositions.OrEmptyIfNull())

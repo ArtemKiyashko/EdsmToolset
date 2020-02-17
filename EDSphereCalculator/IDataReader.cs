@@ -8,6 +8,7 @@ namespace EDSphereCalculator
     public interface IDataReader<T> where T : new()
     {
         Task<bool> ReadAsync();
+        Task<bool> ValidateAsync();
         T Result { get; }
     }
 }

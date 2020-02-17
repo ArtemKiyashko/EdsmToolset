@@ -35,8 +35,9 @@ namespace EDSphereCalculator
         public DbSet<CelestialBody> CelestialBodies { get; set; }
         public DbSet<CelestialBodyAtmosphereComposition> CelestialBodyAtmosphereCompositions { get; set; }
         public DbSet<CelestialBodyMaterial> CelestialBodyMaterials { get; set; }
-        public DbSet<CelestialBodyParent> CelestialBodyParens { get; set; }
+        public DbSet<CelestialBodyParent> CelestialBodyParents { get; set; }
         public DbSet<CelestialBodyRing> CelestialBodyRings { get; set; }
         public DbSet<CelestialBodySolidComposition> CelestialBodySolidCompositios { get; set; }
+        public DbSet<CelestialBodyBelt> CelestialBodyBelts { get; set; }
     }
 }
