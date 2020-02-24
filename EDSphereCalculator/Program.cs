@@ -31,8 +31,8 @@ namespace EDSphereCalculator
             _configuration = builder.Build();
             
             _serviceCollection = new ServiceCollection();
-
-            Parser.Default.ParseArguments<CmdOptions>(args)
+            var parser = new Parser(with => with.CaseInsensitiveEnumValues = true);
+            parser.ParseArguments<CmdOptions>(args)
                 .WithParsed(RunApplication);
             Console.WriteLine("Press any key to stop");
             Console.ReadKey();
@@ -46,14 +46,15 @@ namespace EDSphereCalculator
                 .AddDistanceResultWriters(options)
                 .AddAutoMapper(typeof(MapperProfile))
                 .AddTransient<IResultWriter<string>, ConsoleDefaultWriter>()
-                .AddTransient<IDataReader<EdSystem>>((_) => new DefaultDataReader<EdSystem>(options.EdsmStarDataPath, _.GetService<IResultWriter<string>>()))
-                .AddTransient<IDataReader<CelestialBody>>((_) => new DefaultDataReader<CelestialBody>(options.EdsmBodiesDataPath, _.GetService<IResultWriter<string>>()))
+                .AddTransient<IDataReader<EdSystem>>((_) => new DefaultDataReader<EdSystem>(options.EdsmStarDataPath, _.GetService<IResultWriter<string>>(), options.SkipSystems))
+                .AddTransient<IDataReader<CelestialBody>>((_) => new DefaultDataReader<CelestialBody>(options.EdsmBodiesDataPath, _.GetService<IResultWriter<string>>(), options.SkipBodies))
                 .AddDbContext<EdsmDbContext>(dbOptions =>
                 {
                     dbOptions.UseLazyLoadingProxies();
                     dbOptions.UseNpgsql(_configuration.GetConnectionString("Postgre"), sqlOptions => sqlOptions.CommandTimeout(1800));
                 })
                 .AddTransient<DefaultDbImporter>()
+                .AddTransient<IImportActionFactory, DefaultImportActionFactory>()
                 .BuildServiceProvider();
 
             using var scope = _serviceProvider.CreateScope();

@@ -25,10 +25,12 @@ namespace EDSphereCalculator
         }
         private IList<string> _deserializationErrors;
         private readonly IResultWriter<string> _resultWriter;
+        private readonly long _skipEntriesCount;
+        private long _entriesReadCount;
 
         public T Result { get; private set; }
 
-        public DefaultDataReader(string filePath, IResultWriter<string> resultWriter)
+        public DefaultDataReader(string filePath, IResultWriter<string> resultWriter, long skipEntriesCount)
         {
             _filePath = filePath;
             _streamReader = string.IsNullOrEmpty(filePath) ? new StreamReader(new MemoryStream()) : new StreamReader(filePath);
@@ -39,6 +41,8 @@ namespace EDSphereCalculator
             _serializer.MissingMemberHandling = MissingMemberHandling.Error;
             _deserializationErrors = new List<string>();
             _resultWriter = resultWriter;
+            _skipEntriesCount = skipEntriesCount;
+            _entriesReadCount = 0;
         }
 
         public void Dispose()
@@ -77,14 +81,23 @@ namespace EDSphereCalculator
 
         public async Task<bool> ReadAsync()
         {
+            long skippedEntriesCount = 0;
             while (await _jsonReader.ReadAsync())
             {
-                if (_jsonReader.TokenType == JsonToken.StartObject)
+                if (_jsonReader.TokenType == JsonToken.StartObject && _jsonReader.Depth == 1)
                 {
+                    _entriesReadCount++;
+                    if (_entriesReadCount <= _skipEntriesCount)
+                    {
+                        _serializer.Deserialize<T>(_jsonReader);
+                        await _resultWriter.WriteResultAsync($"Entries skipped: {++skippedEntriesCount}");
+                        continue;
+                    }
                     Result = _serializer.Deserialize<T>(_jsonReader);
                     return true;
                 }
             }
+            await _resultWriter.WriteResultAsync($"Total entries Count: {_entriesReadCount}");
             return false;
         }
     }

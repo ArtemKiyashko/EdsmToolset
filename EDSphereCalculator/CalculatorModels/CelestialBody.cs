@@ -18,15 +18,14 @@ namespace EDSphereCalculator.CalculatorModels
         public int? EdsmBodyId { get; set; }
         [Required]
         [JsonProperty("name")]
+        [MaxLength(100)]
         public string Name { get; set; }
-        [Required]
         [JsonProperty("type")]
         public string Type { get; set; }
-        [Required]
         [JsonProperty("subType")]
         public string SubType { get; set; }
         [JsonProperty("distanceToArrival")]
-        public int DistanceToArrival { get; set; }
+        public int? DistanceToArrival { get; set; }
         [JsonProperty("isLandable")]
         public bool? IsLandable { get; set; }
         [JsonProperty("gravity")]
@@ -58,13 +57,13 @@ namespace EDSphereCalculator.CalculatorModels
         [JsonProperty("rotationalPeriod")]
         public double? RotationalPeriod { get; set; }
         [JsonProperty("rotationalPeriodTidallyLocked")]
-        public bool RotationalPeriodTidallyLocked { get; set; }
+        public bool? RotationalPeriodTidallyLocked { get; set; }
         [JsonProperty("axialTilt")]
         public double? AxialTilt { get; set; }
         [JsonProperty("updateTime")]
         public DateTime UpdateTime { get; set; }
         [JsonProperty("systemId")]
-        public long EdSystemId { get; set; }
+        public long? EdSystemId { get; set; }
         [JsonProperty("systemId64")]
         public long? EdSystemId64 { get; set; }
         [JsonProperty("isMainStar")]

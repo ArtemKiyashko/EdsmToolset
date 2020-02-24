@@ -94,10 +94,10 @@ namespace EDSphereCalculator.Migrations
                 {
                     table.PrimaryKey("PK_CelestialBodies", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CelestialBodies_EdSystems_EdSystemId",
+                        name: "FK_CelestialBodies_EdSystems_EdsmId",
                         column: x => x.EdSystemId,
                         principalTable: "EdSystems",
-                        principalColumn: "Id",
+                        principalColumn: "EdsmId",
                         onDelete: ReferentialAction.Cascade);
                 });
 

@@ -13,11 +13,11 @@ namespace EDSphereCalculator.CalculatorModels
         [JsonProperty("type")]
         public string Type { get; set; }
         [JsonProperty("mass")]
-        public long Mass { get; set; }
+        public double Mass { get; set; }
         [JsonProperty("innerRadius")]
-        public long InnerRadius { get; set; }
+        public double InnerRadius { get; set; }
         [JsonProperty("outerRadius")]
-        public long OuterRadius { get; set; }
+        public double OuterRadius { get; set; }
         [JsonIgnore]
         [Required]
         public virtual CelestialBody Body { get; set; }

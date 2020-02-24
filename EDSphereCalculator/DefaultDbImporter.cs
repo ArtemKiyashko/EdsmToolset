@@ -19,22 +19,26 @@ namespace EDSphereCalculator
         private readonly IDataReader<EdSystem> _edSystemDataReader;
         private readonly IResultWriter<string> _resultWriter;
         private readonly CmdOptions _cmdOptions;
+        private readonly IImportActionFactory _importActionFactory;
 
         public DefaultDbImporter(IDataReader<CelestialBody> bodyDataReader,
             IDataReader<EdSystem> edSystemDataReader,
             EdsmDbContext dbContext,
             IResultWriter<string> resultWriter,
-            CmdOptions cmdOptions)
+            CmdOptions cmdOptions,
+            IImportActionFactory importActionFactory)
         {
             _bodyDataReader = bodyDataReader;
             _dbContext = dbContext;
             _edSystemDataReader = edSystemDataReader;
             _resultWriter = resultWriter;
             _cmdOptions = cmdOptions;
+            _importActionFactory = importActionFactory;
         }
 
         public async Task ImportSystemsAsync()
         {
+            await _resultWriter.WriteResultAsync($"Systems to skip: {_cmdOptions.SkipSystems}");
             var entities = new List<EdSystem>();
             long entitiesProcessed = 0;
             while (await _edSystemDataReader.ReadAsync())
@@ -42,13 +46,13 @@ namespace EDSphereCalculator
                 entities.Add(_edSystemDataReader.Result);
                 if (entities.Count >= _cmdOptions.MaxSystemsBatch)
                 {
-                    await _dbContext.BulkInsertAsync(entities, BulkOptions<EdSystem>(EdSystemPrimaryKeyMapping));
+                    await _importActionFactory.ImportAsync(_dbContext, entities, BulkOptions<EdSystem>(EdSystemPrimaryKeyMapping));
                     entitiesProcessed += entities.Count;
-                    await _resultWriter.WriteResultAsync($"System processed: {entitiesProcessed}");
+                    await _resultWriter.WriteResultAsync($"Systems processed: {entitiesProcessed}");
                     entities.Clear();
                 }
             }
-            await _dbContext.BulkInsertAsync(entities, BulkOptions<EdSystem>(EdSystemPrimaryKeyMapping));
+            await _importActionFactory.ImportAsync(_dbContext, entities, BulkOptions<EdSystem>(EdSystemPrimaryKeyMapping));
             entitiesProcessed += entities.Count;
             await _resultWriter.WriteResultAsync($"Systems processed: {entitiesProcessed}");
         }
@@ -58,6 +62,7 @@ namespace EDSphereCalculator
             return _ =>
             {
                 _.IncludeGraph = true;
+                _.InsertIfNotExists = true;
                 _.IncludeGraphOperationBuilder = graphOperationBuilder;
             };
         }
@@ -78,6 +83,7 @@ namespace EDSphereCalculator
 
         public async Task ImportBodiesAsync()
         {
+            await _resultWriter.WriteResultAsync($"Bodies to skip: {_cmdOptions.SkipBodies}");
             var entities = new List<CelestialBody>();
             long entitiesProcessed = 0;
             while (await _bodyDataReader.ReadAsync())
@@ -85,13 +91,13 @@ namespace EDSphereCalculator
                 entities.Add(_bodyDataReader.Result.AdaptToDb());
                 if (entities.Count >= _cmdOptions.MaxBodiesBatch)
                 {
-                    await _dbContext.BulkInsertAsync(entities, BulkOptions<CelestialBody>(BodyPrimaryKeyMapping));
+                    await _importActionFactory.ImportAsync(_dbContext, entities, BulkOptions<CelestialBody>(BodyPrimaryKeyMapping));
                     entitiesProcessed += entities.Count;
                     await _resultWriter.WriteResultAsync($"Bodies processed: {entitiesProcessed}");
                     entities.Clear();
                 }
             }
-            await _dbContext.BulkInsertAsync(entities, BulkOptions<CelestialBody>(BodyPrimaryKeyMapping));
+            await _importActionFactory.ImportAsync(_dbContext, entities, BulkOptions<CelestialBody>(BodyPrimaryKeyMapping));
             entitiesProcessed += entities.Count;
             await _resultWriter.WriteResultAsync($"Bodies processed: {entitiesProcessed}");
         }

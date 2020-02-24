@@ -6,13 +6,27 @@ using System.Text;
 
 namespace EDSphereCalculator
 {
+    public enum ActionTypes
+    {
+        Merge,
+        Insert
+    }
     public class CmdOptions
     {
+        [Option('a', "action", Required = true, HelpText = "Action: merge or insert")]
+        public ActionTypes Action { get; set; }
+
         [Option('s', "systemsWithCoordinates", Required = false, HelpText = "Set path to EDSM night dump file wih stars and coordinates")]
         public string EdsmStarDataPath { get; set; }
 
+        [Option("skipSystems", Required = false, Default = 0, HelpText = "Number of entries to skip at the beggining of the file")]
+        public long SkipSystems { get; set; }
+
         [Option('b', "bodies", Required = false, HelpText = "Set path to EDSM night dump file celestial bodies information")]
         public string EdsmBodiesDataPath { get; set; }
+
+        [Option("skipBodies", Required = false, Default = 0, HelpText = "Number of entries to skip at the beggining of the file")]
+        public long SkipBodies { get; set; }
 
         [Option('x', Default = 0, HelpText = "Set X coordinate of starting system")]
         public double X { get; set; }
