@@ -102,33 +102,6 @@ namespace EdsmDbImporter.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Distances",
-                columns: table => new
-                {
-                    DistanceFromId = table.Column<int>(nullable: false),
-                    DistanceToId = table.Column<int>(nullable: false),
-                    DistanceFromId1 = table.Column<long>(nullable: true),
-                    DistanceToId1 = table.Column<long>(nullable: true),
-                    LightYears = table.Column<double>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Distances", x => new { x.DistanceFromId, x.DistanceToId });
-                    table.ForeignKey(
-                        name: "FK_Distances_EdSystems_DistanceFromId1",
-                        column: x => x.DistanceFromId1,
-                        principalTable: "EdSystems",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Distances_EdSystems_DistanceToId1",
-                        column: x => x.DistanceToId1,
-                        principalTable: "EdSystems",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CelestialBodyAtmosphereCompositions",
                 columns: table => new
                 {
@@ -296,16 +269,6 @@ namespace EdsmDbImporter.Migrations
                 column: "BodyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Distances_DistanceFromId1",
-                table: "Distances",
-                column: "DistanceFromId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Distances_DistanceToId1",
-                table: "Distances",
-                column: "DistanceToId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_EdSystems_CoordinatesId",
                 table: "EdSystems",
                 column: "CoordinatesId");
@@ -330,9 +293,6 @@ namespace EdsmDbImporter.Migrations
 
             migrationBuilder.DropTable(
                 name: "CelestialBodySolidCompositios");
-
-            migrationBuilder.DropTable(
-                name: "Distances");
 
             migrationBuilder.DropTable(
                 name: "CelestialBodies");
