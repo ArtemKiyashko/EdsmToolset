@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Z.BulkOperations;
 
-namespace EDSphereCalculator
+namespace EdsmDbImporter
 {
     public interface IImportActionFactory
     {

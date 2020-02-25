@@ -1,7 +1,7 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
-using EDSphereCalculator.CalculatorModels;
-using EDSphereCalculator.Mappers;
+using EdsmDbImporter.CalculatorModels;
+using EdsmDbImporter.Mappers;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -9,7 +9,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EDSphereCalculator.ResultWriters
+namespace EdsmDbImporter.ResultWriters
 {
     public class CsvResultWriter<T1, T2> : IResultWriter<T1>, IDisposable 
         where T1 : new()

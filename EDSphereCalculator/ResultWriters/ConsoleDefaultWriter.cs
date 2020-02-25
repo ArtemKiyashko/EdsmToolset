@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EDSphereCalculator.ResultWriters
+namespace EdsmDbImporter.ResultWriters
 {
     public class ConsoleDefaultWriter : IResultWriter<string>
     {

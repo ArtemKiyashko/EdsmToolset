@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace EDSphereCalculator.CalculatorModels
+namespace EdsmDbImporter.CalculatorModels
 {
     public class CelestialBodyParent : DictionaryModelBase<string, int>
     {

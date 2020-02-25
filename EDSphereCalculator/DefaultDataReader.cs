@@ -1,5 +1,5 @@
-﻿using EDSphereCalculator.CalculatorModels;
-using EDSphereCalculator.ResultWriters;
+﻿using EdsmDbImporter.CalculatorModels;
+using EdsmDbImporter.ResultWriters;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EDSphereCalculator
+namespace EdsmDbImporter
 {
     public class DefaultDataReader<T> : IDataReader<T>, IDisposable where T : new()
     {

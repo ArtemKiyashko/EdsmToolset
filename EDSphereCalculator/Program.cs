@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using CommandLine;
-using EDSphereCalculator.CalculatorModels;
-using EDSphereCalculator.Extensions;
-using EDSphereCalculator.Mappers;
-using EDSphereCalculator.ResultWriters;
+using EdsmDbImporter.CalculatorModels;
+using EdsmDbImporter.Extensions;
+using EdsmDbImporter.Mappers;
+using EdsmDbImporter.ResultWriters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,11 +13,10 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EDSphereCalculator
+namespace EdsmDbImporter
 {
     class Program
     {
-        private static Calculator _calculator;
         private static IDbImporter _dbImporter;
         private static IServiceProvider _serviceProvider;
         private static IServiceCollection _serviceCollection;
@@ -42,8 +41,6 @@ namespace EDSphereCalculator
         {
             _serviceProvider = _serviceCollection
                 .AddSingleton(options)
-                .AddTransient<Calculator>()
-                .AddDistanceResultWriters(options)
                 .AddAutoMapper(typeof(MapperProfile))
                 .AddTransient<IResultWriter<string>, ConsoleDefaultWriter>()
                 .AddTransient<IDataReader<EdSystem>>((_) => new DefaultDataReader<EdSystem>(options.EdsmStarDataPath, _.GetService<IResultWriter<string>>(), options.SkipSystems))

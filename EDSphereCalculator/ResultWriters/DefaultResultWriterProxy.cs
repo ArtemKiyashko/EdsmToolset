@@ -1,11 +1,11 @@
-﻿using EDSphereCalculator.CalculatorModels;
-using EDSphereCalculator.Extensions;
+﻿using EdsmDbImporter.CalculatorModels;
+using EdsmDbImporter.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EDSphereCalculator.ResultWriters
+namespace EdsmDbImporter.ResultWriters
 {
     public class DefaultResultWriterProxy<T> : IResultWriterProxy<T>
     {

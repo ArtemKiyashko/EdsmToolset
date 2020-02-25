@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace EDSphereCalculator.CalculatorModels
+namespace EdsmDbImporter.CalculatorModels
 {
     public class EdSystemCoordinates : BaseModel
     {

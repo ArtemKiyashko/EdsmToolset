@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace EDSphereCalculator.CalculatorModels
+namespace EdsmDbImporter.CalculatorModels
 {
     public class EdSystem : BaseModel
     {
@@ -25,10 +25,6 @@ namespace EDSphereCalculator.CalculatorModels
         public virtual EdSystemCoordinates Coordinates { get; set; }
 
         public virtual ICollection<CelestialBody> Bodies { get; set; }
-
-        public virtual ICollection<Distance> DistancesFrom { get; set; }
-
-        public virtual ICollection<Distance> DistancesTo { get; set; }
 
         public override string ToString()
         {

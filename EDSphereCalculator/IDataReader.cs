@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EDSphereCalculator
+namespace EdsmDbImporter
 {
     public interface IDataReader<T> where T : new()
     {

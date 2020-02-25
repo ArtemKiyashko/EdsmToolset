@@ -1,10 +1,10 @@
 ﻿using CommandLine;
-using EDSphereCalculator.CalculatorModels;
+using EdsmDbImporter.CalculatorModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace EDSphereCalculator
+namespace EdsmDbImporter
 {
     public enum ActionTypes
     {

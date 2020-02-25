@@ -1,6 +1,6 @@
-﻿using EDSphereCalculator.CalculatorModels;
-using EDSphereCalculator.Extensions;
-using EDSphereCalculator.ResultWriters;
+﻿using EdsmDbImporter.CalculatorModels;
+using EdsmDbImporter.Extensions;
+using EdsmDbImporter.ResultWriters;
 using EFCore.BulkExtensions;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Z.BulkOperations;
 
-namespace EDSphereCalculator
+namespace EdsmDbImporter
 {
     public class DefaultDbImporter : IDbImporter
     {

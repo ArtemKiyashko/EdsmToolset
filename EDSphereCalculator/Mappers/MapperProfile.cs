@@ -1,9 +1,9 @@
-﻿using EDSphereCalculator.CalculatorModels;
+﻿using EdsmDbImporter.CalculatorModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace EDSphereCalculator.Mappers
+namespace EdsmDbImporter.Mappers
 {
     public class MapperProfile : AutoMapper.Profile
     {

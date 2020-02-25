@@ -1,10 +1,10 @@
-﻿using EDSphereCalculator.CalculatorModels;
+﻿using EdsmDbImporter.CalculatorModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace EDSphereCalculator.Extensions
+namespace EdsmDbImporter.Extensions
 {
     public static class CelestialBodyExtensions
     {

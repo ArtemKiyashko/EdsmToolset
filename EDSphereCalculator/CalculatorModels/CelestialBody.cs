@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace EDSphereCalculator.CalculatorModels
+namespace EdsmDbImporter.CalculatorModels
 {
     public class CelestialBody : BaseModel
     {

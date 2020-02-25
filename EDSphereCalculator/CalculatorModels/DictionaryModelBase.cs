@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EDSphereCalculator.CalculatorModels
+namespace EdsmDbImporter.CalculatorModels
 {
     public class DictionaryModelBase<T1, T2> : BaseModel
     {

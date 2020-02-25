@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace EDSphereCalculator.Migrations
+namespace EdsmDbImporter.Migrations
 {
     public partial class CreateDb : Migration
     {
