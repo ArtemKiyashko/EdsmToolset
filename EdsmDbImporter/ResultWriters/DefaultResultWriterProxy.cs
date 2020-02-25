@@ -1,5 +1,4 @@
-﻿using EdsmDbImporter.CalculatorModels;
-using EdsmDbImporter.Extensions;
+﻿using EdsmDbImporter.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;

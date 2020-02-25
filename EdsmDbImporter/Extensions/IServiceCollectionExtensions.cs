@@ -1,5 +1,4 @@
-﻿using EdsmDbImporter.CalculatorModels;
-using EdsmDbImporter.Mappers;
+﻿using EdsmDbImporter.Mappers;
 using EdsmDbImporter.ResultWriters;
 using Microsoft.Extensions.DependencyInjection;
 using System;

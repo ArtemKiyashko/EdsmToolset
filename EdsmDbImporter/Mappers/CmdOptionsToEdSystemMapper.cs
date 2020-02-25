@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using EdsmDbImporter.CalculatorModels;
+using DataModels;
 using System;
 using System.Collections.Generic;
 using System.Text;

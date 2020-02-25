@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace EdsmDbImporter.CalculatorModels
+namespace DataModels
 {
     public class CelestialBodyAtmosphereComposition : DictionaryModelBase<string, decimal>
     {

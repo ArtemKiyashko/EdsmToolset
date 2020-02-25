@@ -1,6 +1,5 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
-using EdsmDbImporter.CalculatorModels;
 using EdsmDbImporter.Mappers;
 using System;
 using System.Collections.Generic;

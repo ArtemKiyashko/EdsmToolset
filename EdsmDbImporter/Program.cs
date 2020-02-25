@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CommandLine;
-using EdsmDbImporter.CalculatorModels;
+using DataModels;
 using EdsmDbImporter.Extensions;
 using EdsmDbImporter.Mappers;
 using EdsmDbImporter.ResultWriters;

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace EdsmDbImporter.CalculatorModels
+namespace DataModels
 {
-    public class CelestialBodyParent : DictionaryModelBase<string, int>
+    public class CelestialBodySolidComposition : DictionaryModelBase<string, decimal>
     {
         [Required]
         public virtual CelestialBody Body { get; set; }

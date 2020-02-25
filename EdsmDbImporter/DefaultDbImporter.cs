@@ -1,4 +1,4 @@
-﻿using EdsmDbImporter.CalculatorModels;
+﻿using DataModels;
 using EdsmDbImporter.Extensions;
 using EdsmDbImporter.ResultWriters;
 using EFCore.BulkExtensions;

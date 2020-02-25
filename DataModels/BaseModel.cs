@@ -1,9 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace EdsmDbImporter.CalculatorModels
+namespace DataModels
 {
     public class BaseModel
     {

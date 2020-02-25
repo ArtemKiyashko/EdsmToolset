@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace EdsmDbImporter.CalculatorModels
+namespace DataModels
 {
-    public class CelestialBodyRing : BaseModel
+    public class CelestialBodyBelt : BaseModel
     {
         [JsonProperty("name")]
         public string Name { get; set; }

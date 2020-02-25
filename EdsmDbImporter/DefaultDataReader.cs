@@ -1,5 +1,4 @@
-﻿using EdsmDbImporter.CalculatorModels;
-using EdsmDbImporter.ResultWriters;
+﻿using EdsmDbImporter.ResultWriters;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

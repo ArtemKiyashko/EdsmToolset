@@ -1,5 +1,4 @@
 ﻿using CommandLine;
-using EdsmDbImporter.CalculatorModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
