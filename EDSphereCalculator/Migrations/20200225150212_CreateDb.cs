@@ -55,10 +55,10 @@ namespace EdsmDbImporter.Migrations
                     EdsmId = table.Column<long>(nullable: false),
                     EdsmId64 = table.Column<long>(nullable: true),
                     EdsmBodyId = table.Column<int>(nullable: true),
-                    Name = table.Column<string>(nullable: false),
-                    Type = table.Column<string>(nullable: false),
-                    SubType = table.Column<string>(nullable: false),
-                    DistanceToArrival = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(maxLength: 100, nullable: false),
+                    Type = table.Column<string>(nullable: true),
+                    SubType = table.Column<string>(nullable: true),
+                    DistanceToArrival = table.Column<int>(nullable: true),
                     IsLandable = table.Column<bool>(nullable: true),
                     Gravity = table.Column<double>(nullable: true),
                     EarthMasses = table.Column<double>(nullable: true),
@@ -74,10 +74,10 @@ namespace EdsmDbImporter.Migrations
                     OrbitalInclination = table.Column<double>(nullable: true),
                     ArgOfPeriapsis = table.Column<double>(nullable: true),
                     RotationalPeriod = table.Column<double>(nullable: true),
-                    RotationalPeriodTidallyLocked = table.Column<bool>(nullable: false),
+                    RotationalPeriodTidallyLocked = table.Column<bool>(nullable: true),
                     AxialTilt = table.Column<double>(nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: false),
-                    EdSystemId = table.Column<long>(nullable: false),
+                    EdSystemId = table.Column<long>(nullable: true),
                     EdSystemId64 = table.Column<long>(nullable: true),
                     IsMainStar = table.Column<bool>(nullable: true),
                     IsScoopable = table.Column<bool>(nullable: true),
@@ -94,11 +94,11 @@ namespace EdsmDbImporter.Migrations
                 {
                     table.PrimaryKey("PK_CelestialBodies", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CelestialBodies_EdSystems_EdsmId",
+                        name: "FK_CelestialBodies_EdSystems_EdSystemId",
                         column: x => x.EdSystemId,
                         principalTable: "EdSystems",
-                        principalColumn: "EdsmId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -130,9 +130,9 @@ namespace EdsmDbImporter.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(nullable: true),
                     Type = table.Column<string>(nullable: true),
-                    Mass = table.Column<long>(nullable: false),
-                    InnerRadius = table.Column<long>(nullable: false),
-                    OuterRadius = table.Column<long>(nullable: false),
+                    Mass = table.Column<double>(nullable: false),
+                    InnerRadius = table.Column<double>(nullable: false),
+                    OuterRadius = table.Column<double>(nullable: false),
                     BodyId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
@@ -196,9 +196,9 @@ namespace EdsmDbImporter.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(nullable: true),
                     Type = table.Column<string>(nullable: true),
-                    Mass = table.Column<long>(nullable: false),
-                    InnerRadius = table.Column<long>(nullable: false),
-                    OuterRadius = table.Column<long>(nullable: false),
+                    Mass = table.Column<double>(nullable: false),
+                    InnerRadius = table.Column<double>(nullable: false),
+                    OuterRadius = table.Column<double>(nullable: false),
                     BodyId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
@@ -234,9 +234,39 @@ namespace EdsmDbImporter.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_CelestialBodies_DistanceToArrival",
+                table: "CelestialBodies",
+                column: "DistanceToArrival");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CelestialBodies_EdSystemId",
                 table: "CelestialBodies",
                 column: "EdSystemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CelestialBodies_EdsmBodyId",
+                table: "CelestialBodies",
+                column: "EdsmBodyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CelestialBodies_EdsmId",
+                table: "CelestialBodies",
+                column: "EdsmId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CelestialBodies_Id",
+                table: "CelestialBodies",
+                column: "Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CelestialBodies_SubType",
+                table: "CelestialBodies",
+                column: "SubType");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CelestialBodies_Type",
+                table: "CelestialBodies",
+                column: "Type");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CelestialBodyAtmosphereCompositions_BodyId",
@@ -252,6 +282,11 @@ namespace EdsmDbImporter.Migrations
                 name: "IX_CelestialBodyMaterials_BodyId",
                 table: "CelestialBodyMaterials",
                 column: "BodyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CelestialBodyMaterials_Key",
+                table: "CelestialBodyMaterials",
+                column: "Key");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CelestialBodyParents_BodyId",
@@ -272,6 +307,26 @@ namespace EdsmDbImporter.Migrations
                 name: "IX_EdSystems_CoordinatesId",
                 table: "EdSystems",
                 column: "CoordinatesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EdSystems_EdsmId",
+                table: "EdSystems",
+                column: "EdsmId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EdSystems_EdsmId64",
+                table: "EdSystems",
+                column: "EdsmId64");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EdSystems_Id",
+                table: "EdSystems",
+                column: "Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EdSystems_Name",
+                table: "EdSystems",
+                column: "Name");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

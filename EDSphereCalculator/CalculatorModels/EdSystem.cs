@@ -23,6 +23,7 @@ namespace EdsmDbImporter.CalculatorModels
 
         [JsonProperty("coords")]
         public virtual EdSystemCoordinates Coordinates { get; set; }
+        public long? CoordinatesId { get; set; }
 
         public virtual ICollection<CelestialBody> Bodies { get; set; }
 

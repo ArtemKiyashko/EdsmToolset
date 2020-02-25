@@ -19,7 +19,7 @@ namespace EdsmDbImporter.Migrations
                 .HasAnnotation("ProductVersion", "3.1.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBody", b =>
+            modelBuilder.Entity("EdsmDbImporter.CalculatorModels.CelestialBody", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -41,13 +41,13 @@ namespace EdsmDbImporter.Migrations
                     b.Property<double?>("AxialTilt")
                         .HasColumnType("double precision");
 
-                    b.Property<int>("DistanceToArrival")
+                    b.Property<int?>("DistanceToArrival")
                         .HasColumnType("integer");
 
                     b.Property<double?>("EarthMasses")
                         .HasColumnType("double precision");
 
-                    b.Property<long>("EdSystemId")
+                    b.Property<long?>("EdSystemId")
                         .HasColumnType("bigint");
 
                     b.Property<long?>("EdSystemId64")
@@ -82,7 +82,8 @@ namespace EdsmDbImporter.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("character varying(100)")
+                        .HasMaxLength(100);
 
                     b.Property<double?>("OrbitalEccentricity")
                         .HasColumnType("double precision");
@@ -102,7 +103,7 @@ namespace EdsmDbImporter.Migrations
                     b.Property<double?>("RotationalPeriod")
                         .HasColumnType("double precision");
 
-                    b.Property<bool>("RotationalPeriodTidallyLocked")
+                    b.Property<bool?>("RotationalPeriodTidallyLocked")
                         .HasColumnType("boolean");
 
                     b.Property<double?>("SemiMajorAxis")
@@ -118,7 +119,6 @@ namespace EdsmDbImporter.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("SubType")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<double?>("SurfacePressure")
@@ -131,7 +131,6 @@ namespace EdsmDbImporter.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Type")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("UpdateTime")
@@ -142,12 +141,24 @@ namespace EdsmDbImporter.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DistanceToArrival");
+
                     b.HasIndex("EdSystemId");
+
+                    b.HasIndex("EdsmBodyId");
+
+                    b.HasIndex("EdsmId");
+
+                    b.HasIndex("Id");
+
+                    b.HasIndex("SubType");
+
+                    b.HasIndex("Type");
 
                     b.ToTable("CelestialBodies");
                 });
 
-            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodyAtmosphereComposition", b =>
+            modelBuilder.Entity("EdsmDbImporter.CalculatorModels.CelestialBodyAtmosphereComposition", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -170,7 +181,7 @@ namespace EdsmDbImporter.Migrations
                     b.ToTable("CelestialBodyAtmosphereCompositions");
                 });
 
-            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodyBelt", b =>
+            modelBuilder.Entity("EdsmDbImporter.CalculatorModels.CelestialBodyBelt", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -180,17 +191,17 @@ namespace EdsmDbImporter.Migrations
                     b.Property<long>("BodyId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("InnerRadius")
-                        .HasColumnType("bigint");
+                    b.Property<double>("InnerRadius")
+                        .HasColumnType("double precision");
 
-                    b.Property<long>("Mass")
-                        .HasColumnType("bigint");
+                    b.Property<double>("Mass")
+                        .HasColumnType("double precision");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<long>("OuterRadius")
-                        .HasColumnType("bigint");
+                    b.Property<double>("OuterRadius")
+                        .HasColumnType("double precision");
 
                     b.Property<string>("Type")
                         .HasColumnType("text");
@@ -202,7 +213,7 @@ namespace EdsmDbImporter.Migrations
                     b.ToTable("CelestialBodyBelts");
                 });
 
-            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodyMaterial", b =>
+            modelBuilder.Entity("EdsmDbImporter.CalculatorModels.CelestialBodyMaterial", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -222,10 +233,12 @@ namespace EdsmDbImporter.Migrations
 
                     b.HasIndex("BodyId");
 
+                    b.HasIndex("Key");
+
                     b.ToTable("CelestialBodyMaterials");
                 });
 
-            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodyParent", b =>
+            modelBuilder.Entity("EdsmDbImporter.CalculatorModels.CelestialBodyParent", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -248,7 +261,7 @@ namespace EdsmDbImporter.Migrations
                     b.ToTable("CelestialBodyParents");
                 });
 
-            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodyRing", b =>
+            modelBuilder.Entity("EdsmDbImporter.CalculatorModels.CelestialBodyRing", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -258,17 +271,17 @@ namespace EdsmDbImporter.Migrations
                     b.Property<long>("BodyId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("InnerRadius")
-                        .HasColumnType("bigint");
+                    b.Property<double>("InnerRadius")
+                        .HasColumnType("double precision");
 
-                    b.Property<long>("Mass")
-                        .HasColumnType("bigint");
+                    b.Property<double>("Mass")
+                        .HasColumnType("double precision");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<long>("OuterRadius")
-                        .HasColumnType("bigint");
+                    b.Property<double>("OuterRadius")
+                        .HasColumnType("double precision");
 
                     b.Property<string>("Type")
                         .HasColumnType("text");
@@ -280,7 +293,7 @@ namespace EdsmDbImporter.Migrations
                     b.ToTable("CelestialBodyRings");
                 });
 
-            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodySolidComposition", b =>
+            modelBuilder.Entity("EdsmDbImporter.CalculatorModels.CelestialBodySolidComposition", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -303,33 +316,7 @@ namespace EdsmDbImporter.Migrations
                     b.ToTable("CelestialBodySolidCompositios");
                 });
 
-            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.Distance", b =>
-                {
-                    b.Property<int>("DistanceFromId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("DistanceToId")
-                        .HasColumnType("integer");
-
-                    b.Property<long?>("DistanceFromId1")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("DistanceToId1")
-                        .HasColumnType("bigint");
-
-                    b.Property<double>("LightYears")
-                        .HasColumnType("double precision");
-
-                    b.HasKey("DistanceFromId", "DistanceToId");
-
-                    b.HasIndex("DistanceFromId1");
-
-                    b.HasIndex("DistanceToId1");
-
-                    b.ToTable("Distances");
-                });
-
-            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.EdSystem", b =>
+            modelBuilder.Entity("EdsmDbImporter.CalculatorModels.EdSystem", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -356,10 +343,18 @@ namespace EdsmDbImporter.Migrations
 
                     b.HasIndex("CoordinatesId");
 
+                    b.HasIndex("EdsmId");
+
+                    b.HasIndex("EdsmId64");
+
+                    b.HasIndex("Id");
+
+                    b.HasIndex("Name");
+
                     b.ToTable("EdSystems");
                 });
 
-            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.EdSystemCoordinates", b =>
+            modelBuilder.Entity("EdsmDbImporter.CalculatorModels.EdSystemCoordinates", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -380,85 +375,70 @@ namespace EdsmDbImporter.Migrations
                     b.ToTable("EdSystemCoordinates");
                 });
 
-            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBody", b =>
+            modelBuilder.Entity("EdsmDbImporter.CalculatorModels.CelestialBody", b =>
                 {
-                    b.HasOne("EDSphereCalculator.CalculatorModels.EdSystem", null)
+                    b.HasOne("EdsmDbImporter.CalculatorModels.EdSystem", null)
                         .WithMany("Bodies")
-                        .HasForeignKey("EdSystemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EdSystemId");
                 });
 
-            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodyAtmosphereComposition", b =>
+            modelBuilder.Entity("EdsmDbImporter.CalculatorModels.CelestialBodyAtmosphereComposition", b =>
                 {
-                    b.HasOne("EDSphereCalculator.CalculatorModels.CelestialBody", "Body")
+                    b.HasOne("EdsmDbImporter.CalculatorModels.CelestialBody", "Body")
                         .WithMany("BodyAtmosphereCompositions")
                         .HasForeignKey("BodyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodyBelt", b =>
+            modelBuilder.Entity("EdsmDbImporter.CalculatorModels.CelestialBodyBelt", b =>
                 {
-                    b.HasOne("EDSphereCalculator.CalculatorModels.CelestialBody", "Body")
+                    b.HasOne("EdsmDbImporter.CalculatorModels.CelestialBody", "Body")
                         .WithMany("Belts")
                         .HasForeignKey("BodyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodyMaterial", b =>
+            modelBuilder.Entity("EdsmDbImporter.CalculatorModels.CelestialBodyMaterial", b =>
                 {
-                    b.HasOne("EDSphereCalculator.CalculatorModels.CelestialBody", "Body")
+                    b.HasOne("EdsmDbImporter.CalculatorModels.CelestialBody", "Body")
                         .WithMany("BodyMaterials")
                         .HasForeignKey("BodyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodyParent", b =>
+            modelBuilder.Entity("EdsmDbImporter.CalculatorModels.CelestialBodyParent", b =>
                 {
-                    b.HasOne("EDSphereCalculator.CalculatorModels.CelestialBody", "Body")
+                    b.HasOne("EdsmDbImporter.CalculatorModels.CelestialBody", "Body")
                         .WithMany("BodyParents")
                         .HasForeignKey("BodyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodyRing", b =>
+            modelBuilder.Entity("EdsmDbImporter.CalculatorModels.CelestialBodyRing", b =>
                 {
-                    b.HasOne("EDSphereCalculator.CalculatorModels.CelestialBody", "Body")
+                    b.HasOne("EdsmDbImporter.CalculatorModels.CelestialBody", "Body")
                         .WithMany("Rings")
                         .HasForeignKey("BodyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.CelestialBodySolidComposition", b =>
+            modelBuilder.Entity("EdsmDbImporter.CalculatorModels.CelestialBodySolidComposition", b =>
                 {
-                    b.HasOne("EDSphereCalculator.CalculatorModels.CelestialBody", "Body")
+                    b.HasOne("EdsmDbImporter.CalculatorModels.CelestialBody", "Body")
                         .WithMany("BodySolidCompositions")
                         .HasForeignKey("BodyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.Distance", b =>
+            modelBuilder.Entity("EdsmDbImporter.CalculatorModels.EdSystem", b =>
                 {
-                    b.HasOne("EDSphereCalculator.CalculatorModels.EdSystem", "DistanceFrom")
-                        .WithMany("DistancesTo")
-                        .HasForeignKey("DistanceFromId1")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("EDSphereCalculator.CalculatorModels.EdSystem", "DistanceTo")
-                        .WithMany("DistancesFrom")
-                        .HasForeignKey("DistanceToId1")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("EDSphereCalculator.CalculatorModels.EdSystem", b =>
-                {
-                    b.HasOne("EDSphereCalculator.CalculatorModels.EdSystemCoordinates", "Coordinates")
+                    b.HasOne("EdsmDbImporter.CalculatorModels.EdSystemCoordinates", "Coordinates")
                         .WithMany()
                         .HasForeignKey("CoordinatesId");
                 });
