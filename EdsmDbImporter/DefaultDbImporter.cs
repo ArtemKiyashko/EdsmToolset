@@ -1,4 +1,5 @@
 ﻿using DataModels;
+using DataModels.Extensions;
 using EdsmDbImporter.Extensions;
 using EdsmDbImporter.ResultWriters;
 using EFCore.BulkExtensions;
