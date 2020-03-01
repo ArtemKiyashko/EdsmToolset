@@ -33,6 +33,7 @@ namespace EdsmDbImporter
             modelBuilder.Entity<CelestialBody>().HasIndex(_ => _.DistanceToArrival);
             modelBuilder.Entity<CelestialBody>().HasIndex(_ => _.EdsmBodyId);
             modelBuilder.Entity<CelestialBody>().HasIndex(_ => _.EdSystemId);
+            modelBuilder.Entity<CelestialBody>().HasIndex(_ => _.Gravity);
 
             modelBuilder.Entity<CelestialBodyAtmosphereComposition>().HasIndex(_ => _.BodyId);
 

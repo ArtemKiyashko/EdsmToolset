@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EdsmDbImporter", "EdsmDbImp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataModels", "DataModels\DataModels.csproj", "{AE969932-FD2B-4093-BC7C-F93C6CD0A788}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EddnSubscriber", "EddnSubscriber\EddnSubscriber.csproj", "{80B5C935-986B-4453-9AE1-AA1B1FD37E17}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{AE969932-FD2B-4093-BC7C-F93C6CD0A788}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE969932-FD2B-4093-BC7C-F93C6CD0A788}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE969932-FD2B-4093-BC7C-F93C6CD0A788}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80B5C935-986B-4453-9AE1-AA1B1FD37E17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80B5C935-986B-4453-9AE1-AA1B1FD37E17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80B5C935-986B-4453-9AE1-AA1B1FD37E17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80B5C935-986B-4453-9AE1-AA1B1FD37E17}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
