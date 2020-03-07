@@ -29,6 +29,7 @@ namespace EddnSubscriber
                     services.AddOptions();
                     services.AddHostedService<EddnSubscriberService>();
                     services.Configure<EddnSettings>(hostContext.Configuration.GetSection("EddnSettings"));
+                    services.AddTransient<IDataReader, DefaultDataReader>();
                 })
                 .ConfigureLogging(logConfig =>
                 {

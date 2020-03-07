@@ -1,4 +1,5 @@
 ﻿using EdsmDbImporter.ResultWriters;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -23,13 +24,13 @@ namespace EdsmDbImporter
             }
         }
         private IList<string> _deserializationErrors;
-        private readonly IResultWriter<string> _resultWriter;
         private readonly long _skipEntriesCount;
         private long _entriesReadCount;
+        private readonly ILogger<DefaultDataReader<T>> _logger;
 
         public T Result { get; private set; }
 
-        public DefaultDataReader(string filePath, IResultWriter<string> resultWriter, long skipEntriesCount)
+        public DefaultDataReader(string filePath, ILogger<DefaultDataReader<T>> logger, long skipEntriesCount)
         {
             _filePath = filePath;
             _streamReader = string.IsNullOrEmpty(filePath) ? new StreamReader(new MemoryStream()) : new StreamReader(filePath);
@@ -39,9 +40,9 @@ namespace EdsmDbImporter
             _serializer.Error += OnError;
             _serializer.MissingMemberHandling = MissingMemberHandling.Error;
             _deserializationErrors = new List<string>();
-            _resultWriter = resultWriter;
             _skipEntriesCount = skipEntriesCount;
             _entriesReadCount = 0;
+            _logger = logger;
         }
 
         public void Dispose()
@@ -71,9 +72,9 @@ namespace EdsmDbImporter
             return !_deserializationErrors.Any();
         }
 
-        private async void OnError(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs args)
+        private void OnError(object sender, Newtonsoft.Json.Serialization.ErrorEventArgs args)
         {
-            await _resultWriter.WriteResultAsync(args.ErrorContext.Error.Message);
+            _logger.LogError(args.ErrorContext.Error.Message);
             _deserializationErrors.Add(args.ErrorContext.Error.Message);
             args.ErrorContext.Handled = true;
         }
@@ -89,14 +90,14 @@ namespace EdsmDbImporter
                     if (_entriesReadCount <= _skipEntriesCount)
                     {
                         _serializer.Deserialize<T>(_jsonReader);
-                        await _resultWriter.WriteResultAsync($"Entries skipped: {++skippedEntriesCount}");
+                        _logger.LogInformation($"Entries skipped: {++skippedEntriesCount}");
                         continue;
                     }
                     Result = _serializer.Deserialize<T>(_jsonReader);
                     return true;
                 }
             }
-            await _resultWriter.WriteResultAsync($"Total entries Count: {_entriesReadCount}");
+            _logger.LogInformation($"Total entries Count: {_entriesReadCount}");
             return false;
         }
     }

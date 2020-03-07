@@ -1,9 +1,11 @@
-﻿using Ionic.Zlib;
+﻿using EddnSubscriber.Models;
+using Ionic.Zlib;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NetMQ;
 using NetMQ.Sockets;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,6 +18,7 @@ namespace EddnSubscriber
     {
         private readonly IHostApplicationLifetime _appLifetime;
         private readonly ILogger<EddnSubscriberService> _logger;
+        private readonly IImportTargetFactory _importTargetFactory;
         private readonly EddnSettings _options;
         private readonly SubscriberSocket _subscriberSocket;
         private readonly UTF8Encoding _encoding;
@@ -23,10 +26,12 @@ namespace EddnSubscriber
         public EddnSubscriberService(
             IHostApplicationLifetime appLifetime, 
             ILogger<EddnSubscriberService> logger,
-            IOptionsSnapshot<EddnSettings> options)
+            IOptionsSnapshot<EddnSettings> options,
+            IImportTargetFactory importTargetFactory)
         {
             _appLifetime = appLifetime;
             _logger = logger;
+            _importTargetFactory = importTargetFactory;
             _options = options.Value;
             _subscriberSocket = new SubscriberSocket();
             _subscriberSocket.Options.ReceiveHighWatermark = _options.ReceiveHighWatermark;
@@ -34,7 +39,7 @@ namespace EddnSubscriber
             _encoding = new UTF8Encoding();
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
             _subscriberSocket.Connect(_options.Address);
             _subscriberSocket.SubscribeToAnyTopic();
@@ -43,6 +48,7 @@ namespace EddnSubscriber
                 var bytesReceived = _subscriberSocket.ReceiveFrameBytes();
                 var uncompressed = ZlibStream.UncompressBuffer(bytesReceived);
                 var entity = _encoding.GetString(uncompressed);
+                await _importTargetFactory.ImportAsync(entity);
                 _logger.LogInformation(entity);
             }
         }

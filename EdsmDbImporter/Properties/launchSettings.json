@@ -1,8 +1,8 @@
 {
   "profiles": {
-    "EDSphereCalculator": {
+    "EdsmDbImporter": {
       "commandName": "Project",
-      "commandLineArgs": "-a merge -b \"E:\\ed_data\\bodies7days.json\" --skipBodies 132000000"
+      "commandLineArgs": "-a insert -s \"C:\\Users\\artem.kiyashko\\Downloads\\systemsWithCoordinates7days\\systemsWithCoordinates7days.json\" --maxSystemsBatch 1"
     }
   }
 }

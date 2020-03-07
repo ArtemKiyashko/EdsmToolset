@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace EddnSubscriber.Models
@@ -8,7 +10,9 @@ namespace EddnSubscriber.Models
     public class EntityMessageBase
     {
         [JsonProperty("event")]
-        public string Event { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        [DefaultValue(EddnEvent.Unknown)]
+        public EddnEvent Event { get; set; }
         [JsonProperty("timestamp")]
         public DateTime? Timestamp { get; set; }
     }

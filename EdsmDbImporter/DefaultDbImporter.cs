@@ -3,11 +3,14 @@ using DataModels.Extensions;
 using EdsmDbImporter.Extensions;
 using EdsmDbImporter.ResultWriters;
 using EFCore.BulkExtensions;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Z.BulkOperations;
 
@@ -18,28 +21,29 @@ namespace EdsmDbImporter
         private readonly IDataReader<CelestialBody> _bodyDataReader;
         private readonly EdsmDbContext _dbContext;
         private readonly IDataReader<EdSystem> _edSystemDataReader;
-        private readonly IResultWriter<string> _resultWriter;
         private readonly CmdOptions _cmdOptions;
         private readonly IImportActionFactory _importActionFactory;
+        private readonly ILogger<DefaultDbImporter> _logger;
 
-        public DefaultDbImporter(IDataReader<CelestialBody> bodyDataReader,
+        public DefaultDbImporter(
+            IDataReader<CelestialBody> bodyDataReader,
             IDataReader<EdSystem> edSystemDataReader,
             EdsmDbContext dbContext,
-            IResultWriter<string> resultWriter,
+            ILogger<DefaultDbImporter> logger,
             CmdOptions cmdOptions,
             IImportActionFactory importActionFactory)
         {
             _bodyDataReader = bodyDataReader;
             _dbContext = dbContext;
             _edSystemDataReader = edSystemDataReader;
-            _resultWriter = resultWriter;
             _cmdOptions = cmdOptions;
             _importActionFactory = importActionFactory;
+            _logger = logger;
         }
 
         public async Task ImportSystemsAsync()
         {
-            await _resultWriter.WriteResultAsync($"Systems to skip: {_cmdOptions.SkipSystems}");
+            _logger.LogInformation($"Systems to skip: {_cmdOptions.SkipSystems}");
             var entities = new List<EdSystem>();
             long entitiesProcessed = 0;
             while (await _edSystemDataReader.ReadAsync())
@@ -49,13 +53,13 @@ namespace EdsmDbImporter
                 {
                     await _importActionFactory.ImportAsync(_dbContext, entities, BulkOptions<EdSystem>(EdSystemPrimaryKeyMapping));
                     entitiesProcessed += entities.Count;
-                    await _resultWriter.WriteResultAsync($"Systems processed: {entitiesProcessed}");
+                    _logger.LogInformation($"Systems processed: {entitiesProcessed}");
                     entities.Clear();
                 }
             }
             await _importActionFactory.ImportAsync(_dbContext, entities, BulkOptions<EdSystem>(EdSystemPrimaryKeyMapping));
             entitiesProcessed += entities.Count;
-            await _resultWriter.WriteResultAsync($"Systems processed: {entitiesProcessed}");
+            _logger.LogInformation($"Systems processed: {entitiesProcessed}");
         }
 
         private Action<BulkOperation<T>> BulkOptions<T>(Action<BulkOperation> graphOperationBuilder) where T : class
@@ -84,7 +88,7 @@ namespace EdsmDbImporter
 
         public async Task ImportBodiesAsync()
         {
-            await _resultWriter.WriteResultAsync($"Bodies to skip: {_cmdOptions.SkipBodies}");
+            _logger.LogInformation($"Bodies to skip: {_cmdOptions.SkipBodies}");
             var entities = new List<CelestialBody>();
             long entitiesProcessed = 0;
             while (await _bodyDataReader.ReadAsync())
@@ -94,13 +98,13 @@ namespace EdsmDbImporter
                 {
                     await _importActionFactory.ImportAsync(_dbContext, entities, BulkOptions<CelestialBody>(BodyPrimaryKeyMapping));
                     entitiesProcessed += entities.Count;
-                    await _resultWriter.WriteResultAsync($"Bodies processed: {entitiesProcessed}");
+                    _logger.LogInformation($"Bodies processed: {entitiesProcessed}");
                     entities.Clear();
                 }
             }
             await _importActionFactory.ImportAsync(_dbContext, entities, BulkOptions<CelestialBody>(BodyPrimaryKeyMapping));
             entitiesProcessed += entities.Count;
-            await _resultWriter.WriteResultAsync($"Bodies processed: {entitiesProcessed}");
+            _logger.LogInformation($"Bodies processed: {entitiesProcessed}");
         }
 
         private void BodyPrimaryKeyMapping(BulkOperation operation)
@@ -141,6 +145,16 @@ namespace EdsmDbImporter
                 var bulk = (BulkOperation<CelestialBodySolidComposition>)operation;
                 bulk.ColumnPrimaryKeyExpression = c => new { c.BodyId, c.Key };
             }
+        }
+
+        public Task ImportBodyAsync(CelestialBody celestialBody)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ImportSystemAsync(EdSystem edSystem)
+        {
+            throw new NotImplementedException();
         }
     }
 }
