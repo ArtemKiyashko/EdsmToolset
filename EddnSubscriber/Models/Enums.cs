@@ -12,4 +12,12 @@ namespace EddnSubscriber.Models
         Scan,
         Location
     }
+
+    public enum EddnBodyType
+    {
+        Unknown,
+        Star,
+        Station,
+        Planet
+    }
 }

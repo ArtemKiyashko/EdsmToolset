@@ -1,12 +1,18 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace EddnSubscriber.Models
 {
     public class EddnCelestialBody : EntityMessageBase
     {
+        [JsonProperty("AbsoluteMagnitude")]
+        public double? AbsoluteMagnitude { get; set; }
+        [JsonProperty("Age_MY")]
+        public int? AgeMy { get; set; }
         [JsonProperty("Atmosphere")]
         public string Atmosphere { get; set; }
         [JsonProperty("AtmosphereComposition")]
@@ -19,6 +25,10 @@ namespace EddnSubscriber.Models
         public int? BodyID { get; set; }
         [JsonProperty("BodyName")]
         public string BodyName { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        [DefaultValue(EddnBodyType.Unknown)]
+        [JsonProperty("BodyType")]
+        public EddnBodyType BodyType { get; set; }
         [JsonProperty("Composition")]
         public IDictionary<string, decimal> Composition { get; set; }
         [JsonProperty("DistanceFromArrivalLS")]
@@ -27,6 +37,8 @@ namespace EddnSubscriber.Models
         public double? Eccentricity { get; set; }
         [JsonProperty("Landable")]
         public bool? Landable { get; set; }
+        [JsonProperty("Luminosity")]
+        public string Luminosity { get; set; }
         [JsonProperty("MassEM")]
         public double? MassEm { get; set; }
         [JsonProperty("OrbitalInclination")]
@@ -41,6 +53,8 @@ namespace EddnSubscriber.Models
         public string PlanetClass { get; set; }
         [JsonProperty("Radius")]
         public double? Radius { get; set; }
+        [JsonProperty("Rings")]
+        public IEnumerable<EddnCelestialBodyRing> Rings { get; set; }
         [JsonProperty("RotationPeriod")]
         public double? RotationPeriod { get; set; }
         [JsonProperty("ScanType")]
@@ -51,6 +65,12 @@ namespace EddnSubscriber.Models
         public IEnumerable<double> StarPos { get; set; }
         [JsonProperty("StarSystem")]
         public string StarSystem { get; set; }
+        [JsonProperty("StarType")]
+        public string StarType { get; set; }
+        [JsonProperty("StellarMass")]
+        public double? StellarMass { get; set; }
+        [JsonProperty("Subclass")]
+        public byte? SubClass { get; set; }
         [JsonProperty("SurfaceGravity")]
         public double? SurfaceGravity { get; set; }
         [JsonProperty("SurfacePressure")]
@@ -69,19 +89,5 @@ namespace EddnSubscriber.Models
         public bool? WasDiscovered { get; set; }
         [JsonProperty("WasMapped")]
         public bool? WasMapped { get; set; }
-        [JsonProperty("AbsoluteMagnitude")]
-        public double? AbsoluteMagnitude { get; set; }
-        [JsonProperty("Age_MY")]
-        public int? AgeMy { get; set; }
-        [JsonProperty("Luminosity")]
-        public string Luminosity { get; set; }
-        [JsonProperty("Rings")]
-        public IEnumerable<EddnCelestialBodyRing> Rings { get; set; }
-        [JsonProperty("StarType")]
-        public string StarType { get; set; }
-        [JsonProperty("StellarMass")]
-        public double? StellarMass { get; set; }
-        [JsonProperty("Subclass")]
-        public byte? SubClass { get; set; }
     }
 }

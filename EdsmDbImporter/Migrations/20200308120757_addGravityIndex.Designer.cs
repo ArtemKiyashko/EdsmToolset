@@ -3,15 +3,17 @@ using System;
 using EdsmDbImporter;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace EdsmDbImporter.Migrations
 {
     [DbContext(typeof(EdsmDbContext))]
-    partial class EdsmDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200308120757_addGravityIndex")]
+    partial class addGravityIndex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
