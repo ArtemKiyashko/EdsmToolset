@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using DataModels;
 using EddnSubscriber.Models;
+using EdsmDbImporter.Extensions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace EddnSubscriber.Mappers
@@ -23,13 +25,13 @@ namespace EddnSubscriber.Mappers
 
             var isStar = (source.Event == EddnEvent.Scan && !string.IsNullOrEmpty(source.Luminosity))
                 || source.BodyType == EddnBodyType.Star;
-            
+
             destination.AbsoluteMagnitude = source.AbsoluteMagnitude;
             destination.Age = source.AgeMy;
             destination.ArgOfPeriapsis = source.Periapsis;
             destination.AtmosphereType = source.Atmosphere;
             destination.AxialTilt = source.AxialTilt;
-            destination.DistanceToArrival = (int?)source.DistanceFromArrivalLs;
+            destination.DistanceToArrival = (int?)(source.DistanceFromArrivalLs);
             destination.EarthMasses = source.MassEm;
             destination.EdsmBodyId = source.BodyID;
             destination.EdsmId = -1; //TODO: re-think merging strategy as we don`t have EdsmId here
@@ -54,16 +56,28 @@ namespace EddnSubscriber.Mappers
             destination.SolarMasses = source.StellarMass;
             destination.SolarRadius = isStar ? source.Radius / Conststants.SOLAR_RADIUS_METERS : null;
             destination.SpectralClass = !isStar ? null : $"{source.StarType}{source.SubClass} {source.Luminosity}";
-            FillSubType(source, destination, isStar);
             destination.SurfacePressure = source.SurfacePressure / Conststants.PRESSURE_PA;
-            destination.SurfaceTemperature = source.SurfaceTemperature;
+            destination.SurfaceTemperature = System.Convert.ToInt32(source.SurfaceTemperature);
             destination.TerraformingState = source.TerraformState.Equals("Terraformable", StringComparison.InvariantCultureIgnoreCase) ?
                 "Candidate for terraforming" :
                 source.TerraformState;
             destination.Type = isStar ? "Star" : "Planet";
             destination.UpdateTime = DateTime.Now;
             destination.VolcanismType = !isStar && string.IsNullOrEmpty(source.Volcanism) ? "No volcanism" : source.Volcanism;
+            FillSubType(source, destination, isStar);
+            FillRingsBelts(source, destination, context);
             return destination;
+        }
+
+        private static void FillRingsBelts(EddnCelestialBody source, CelestialBody destination, ResolutionContext context)
+        {
+            foreach (var ringOrBelt in source.Rings.OrEmptyIfNull().GroupBy(_ => _.Name.Contains("Ring", StringComparison.InvariantCultureIgnoreCase)))
+            {
+                if (ringOrBelt.Key)
+                    destination.Rings = new List<CelestialBodyRing>(context.Mapper.Map<IEnumerable<CelestialBodyRing>>(ringOrBelt));
+                else
+                    destination.Belts = new List<CelestialBodyBelt>(context.Mapper.Map<IEnumerable<CelestialBodyBelt>>(ringOrBelt));
+            }
         }
 
         private void FillSubType(EddnCelestialBody source, CelestialBody destination, bool isStar)

@@ -76,7 +76,7 @@ namespace EddnSubscriber.Models
         [JsonProperty("SurfacePressure")]
         public double? SurfacePressure { get; set; }
         [JsonProperty("SurfaceTemperature")]
-        public int? SurfaceTemperature { get; set; }
+        public double? SurfaceTemperature { get; set; }
         [JsonProperty("SystemAddress")]
         public long? SystemAddress { get; set; }
         [JsonProperty("TerraformState")]
