@@ -1,9 +1,5 @@
-﻿using AutoMapper;
-using CommandLine;
+﻿using CommandLine;
 using DataModels;
-using EdsmDbImporter.Extensions;
-using EdsmDbImporter.Mappers;
-using EdsmDbImporter.ResultWriters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +27,7 @@ namespace EdsmDbImporter
             _parserResult = parser.ParseArguments<CmdOptions>(args).WithNotParsed(_ => Environment.Exit(-1));
 
             _configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
+                .AddJsonFile("dbimportersettings.json", optional: false, reloadOnChange: false)
                 .AddEnvironmentVariables()
                 .Build();
 

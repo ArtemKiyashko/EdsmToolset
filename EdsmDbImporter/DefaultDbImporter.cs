@@ -41,6 +41,14 @@ namespace EdsmDbImporter
             _logger = logger;
         }
 
+        public DefaultDbImporter(
+            EdsmDbContext dbContext,
+            ILogger<DefaultDbImporter> logger)
+        {
+            _dbContext = dbContext;
+            _logger = logger;
+        }
+
         public async Task ImportSystemsAsync()
         {
             _logger.LogInformation($"Systems to skip: {_cmdOptions.SkipSystems}");
@@ -149,12 +157,12 @@ namespace EdsmDbImporter
 
         public Task ImportBodyAsync(CelestialBody celestialBody)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task ImportSystemAsync(EdSystem edSystem)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
     }
 }

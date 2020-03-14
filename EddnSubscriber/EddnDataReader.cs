@@ -8,13 +8,13 @@ using System.Text;
 
 namespace EddnSubscriber
 {
-    public class DefaultDataReader : IDataReader
+    public class EddnDataReader : IDataReader
     {
         private readonly JsonSerializer _serializer;
-        private readonly ILogger<DefaultDataReader> _logger;
+        private readonly ILogger<EddnDataReader> _logger;
         private readonly IList<string> _deserializationErrors;
 
-        public DefaultDataReader(ILogger<DefaultDataReader> logger)
+        public EddnDataReader(ILogger<EddnDataReader> logger)
         {
             _serializer = new JsonSerializer();
             _serializer.Error += _serializer_Error;

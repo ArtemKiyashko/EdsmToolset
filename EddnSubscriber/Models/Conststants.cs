@@ -16,6 +16,7 @@ namespace EddnSubscriber.Models
         public const double LS_M = 299792458;
         public const double PRESSURE_PA = 101325;
         public const double AU_LS_M = AU_M / LS_M;
+        public const double ONE_G = 9.80665;
 
         public static List<string> ScoopableStarTypes = new List<string>
         {
@@ -42,6 +43,7 @@ namespace EddnSubscriber.Models
             { "B_BlueWhiteSuperGiant",  "B (Blue-White super giant) Star" },
             { "F_WhiteSuperGiant",      "F (White super giant) Star" },
             { "G_WhiteSuperGiant",      "G (White-Yellow super giant) Star" },
+            { "G",                      "G (White-Yellow) Star" },
             { "K_OrangeGiant",          "K (Yellow-Orange giant) Star" },
             { "M_RedGiant",             "M (Red giant) Star" },
             { "M_RedSuperGiant",        "M (Red super giant) Star" },

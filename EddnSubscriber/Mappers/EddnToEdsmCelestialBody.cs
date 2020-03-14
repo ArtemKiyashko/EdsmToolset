@@ -35,11 +35,11 @@ namespace EddnSubscriber.Mappers
             destination.EarthMasses = source.MassEm;
             destination.EdsmBodyId = source.BodyID;
             destination.EdsmId = -1; //TODO: re-think merging strategy as we don`t have EdsmId here
-            destination.EdsmId64 = source.SystemAddress; //TODO: EdsmId64 - should calculate
+            destination.EdsmId64 = -1; //TODO: EdsmId64 - should calculate
             destination.EdSystemId = -1;
             destination.EdSystemId64 = source.SystemAddress;
             destination.EdSystemName = source.StarSystem;
-            destination.Gravity = source.SurfaceGravity;
+            destination.Gravity = source.SurfaceGravity / Conststants.ONE_G;
             destination.IsLandable = !isStar ? source.Landable : null;
             destination.IsMainStar = isStar ? source.BodyID == 0 : (bool?)null;
             destination.IsScoopable = isStar ? Conststants.ScoopableStarTypes.Contains(source.StarType) : (bool?)null;
@@ -57,19 +57,25 @@ namespace EddnSubscriber.Mappers
             destination.SolarRadius = isStar ? source.Radius / Conststants.SOLAR_RADIUS_METERS : null;
             destination.SpectralClass = !isStar ? null : $"{source.StarType}{source.SubClass} {source.Luminosity}";
             destination.SurfacePressure = source.SurfacePressure / Conststants.PRESSURE_PA;
-            destination.SurfaceTemperature = System.Convert.ToInt32(source.SurfaceTemperature);
-            destination.TerraformingState = source.TerraformState.Equals("Terraformable", StringComparison.InvariantCultureIgnoreCase) ?
-                "Candidate for terraforming" :
-                source.TerraformState;
+            destination.SurfaceTemperature = (int?)source.SurfaceTemperature;
+            if (!isStar)
+            {
+                destination.TerraformingState = string.IsNullOrEmpty(source.TerraformState)
+                    ? "Not terraformable"
+                    : source.TerraformState.Equals("Terraformable", StringComparison.InvariantCultureIgnoreCase) ?
+                    "Candidate for terraforming" :
+                    source.TerraformState;
+            }
+
             destination.Type = isStar ? "Star" : "Planet";
-            destination.UpdateTime = DateTime.Now;
+            destination.UpdateTime = DateTime.UtcNow;
             destination.VolcanismType = !isStar && string.IsNullOrEmpty(source.Volcanism) ? "No volcanism" : source.Volcanism;
             FillSubType(source, destination, isStar);
             FillRingsBelts(source, destination, context);
             return destination;
         }
 
-        private static void FillRingsBelts(EddnCelestialBody source, CelestialBody destination, ResolutionContext context)
+        private void FillRingsBelts(EddnCelestialBody source, CelestialBody destination, ResolutionContext context)
         {
             foreach (var ringOrBelt in source.Rings.OrEmptyIfNull().GroupBy(_ => _.Name.Contains("Ring", StringComparison.InvariantCultureIgnoreCase)))
             {

@@ -24,4 +24,16 @@
     <ProjectReference Include="..\EddnSubscriber\EddnSubscriber.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="TestData\BeltClusters.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\Planets.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\Systems.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

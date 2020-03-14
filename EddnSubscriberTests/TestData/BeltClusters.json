@@ -1,0 +1,38 @@
+[
+  [
+    {
+      "$schemaRef": "https://eddn.edcd.io/schemas/journal/1",
+      "header": {
+        "gatewayTimestamp": "2020-03-14T14:27:25.467905Z",
+        "softwareName": "EDDiscovery",
+        "softwareVersion": "11.2.5.0",
+        "uploaderID": "2b1c225e1f15ba9781549ec57aca5fd3f01aee35"
+      },
+      "message": {
+        "BodyID": 7,
+        "BodyName": "Greae Eoq VF-Z c16-3 A Belt Cluster 6",
+        "DistanceFromArrivalLS": 6.341256,
+        "Parents": [
+          {
+            "Ring": 1
+          },
+          {
+            "Star": 0
+          }
+        ],
+        "ScanType": "AutoScan",
+        "StarPos": [
+          4859.3125,
+          -257.125,
+          3508.5
+        ],
+        "StarSystem": "Greae Eoq VF-Z c16-3",
+        "SystemAddress": 916673336722,
+        "WasDiscovered": false,
+        "WasMapped": false,
+        "event": "Scan",
+        "timestamp": "2020-03-14T14:27:14Z"
+      }
+    }
+  ]
+]

@@ -14,6 +14,7 @@ namespace EddnSubscriber.Mappers
             CreateMap<EddnCelestialBody, CelestialBody>().ConvertUsing<EddnToEdsmCelestialBody>();
             CreateMap<EddnCelestialBodyRing, CelestialBodyRing>().ConvertUsing<EddnToEdsmRing>();
             CreateMap<EddnCelestialBodyRing, CelestialBodyBelt>().ConvertUsing<EddnToEdsmBelt>();
+            CreateMap<EddnSystem, EdSystem>().ConvertUsing<EddnToEdsmSystem>();
         }
     }
 }

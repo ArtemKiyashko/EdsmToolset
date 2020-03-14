@@ -23,7 +23,7 @@ namespace EddnSubscriberTests
         public EddnToEdsmCelestialBodyTests()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _dataReader = _fixture.Create<DefaultDataReader>();
+            _dataReader = _fixture.Create<EddnDataReader>();
             _fixture.Register<IConfigurationProvider>(() => new MapperConfiguration(cfg => {
                 cfg.CreateMap<EddnCelestialBody, CelestialBody>().ConvertUsing(_fixture.Create<EddnToEdsmCelestialBody>());
                 cfg.CreateMap<EddnCelestialBodyRing, CelestialBodyRing>().ConvertUsing(_fixture.Create<EddnToEdsmRing>());
@@ -211,6 +211,13 @@ namespace EddnSubscriberTests
             }");
             var result = _mapper.Map<CelestialBody>(entity.Message);
             Assert.Equal(1, result.Belts.Count);
+        }
+
+        [Theory]
+        [JsonFileData("TestData/Planets.json", typeof(Entity<EddnCelestialBody>[]))]
+        public void MapEddnPlanetToEdsm_ShouldMap_Compositions(Entity<EddnCelestialBody> entity)
+        {
+            var result = _mapper.Map<CelestialBody>(entity.Message);
         }
     }
 }

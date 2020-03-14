@@ -1,5 +1,9 @@
-﻿using EddnSubscriber.Models;
+﻿using AutoMapper;
+using EddnSubscriber.Mappers;
+using EddnSubscriber.Models;
+using EdsmDbImporter;
 using Ionic.Zlib;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -22,14 +26,22 @@ namespace EddnSubscriber
             var host = new HostBuilder()
                 .ConfigureAppConfiguration((hostContext, appConfig) =>
                 {
-                    appConfig.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                    appConfig.AddJsonFile("subscribersettings.json", optional: false, reloadOnChange: true);
                     appConfig.AddEnvironmentVariables();
                 })
                 .ConfigureServices((hostContext, services) => {
                     services.AddOptions();
                     services.AddHostedService<EddnSubscriberService>();
                     services.Configure<EddnSettings>(hostContext.Configuration.GetSection("EddnSettings"));
-                    services.AddTransient<IDataReader, DefaultDataReader>();
+                    services.AddTransient<IDataReader, EddnDataReader>();
+                    services.AddTransient<IDbImporter, DefaultDbImporter>();
+                    services.AddTransient<IImportTargetFactory, EddnImportTargetFactory>();
+                    services.AddDbContext<EdsmDbContext>(dbOptions =>
+                    {
+                        dbOptions.UseLazyLoadingProxies();
+                        dbOptions.UseNpgsql(hostContext.Configuration.GetConnectionString("Default"), sqlOptions => sqlOptions.CommandTimeout(1800));
+                    });
+                    services.AddAutoMapper(typeof(MapperProfile));
                 })
                 .ConfigureLogging(logConfig =>
                 {

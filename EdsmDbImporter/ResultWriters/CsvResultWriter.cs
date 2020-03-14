@@ -1,6 +1,5 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
-using EdsmDbImporter.Mappers;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

@@ -1,0 +1,110 @@
+[
+  [
+    {
+      "$schemaRef": "https://eddn.edcd.io/schemas/journal/1",
+      "header": {
+        "gatewayTimestamp": "2020-03-14T14:38:56.525053Z",
+        "softwareName": "EDSM - Console",
+        "softwareVersion": "1.0",
+        "uploaderID": "2f8c6b078bd56e6cec4dc71f86e7e5a18f7f5644"
+      },
+      "message": {
+        "AbsoluteMagnitude": 4.87822,
+        "Age_MY": 4832,
+        "AxialTilt": 0,
+        "BodyID": 4,
+        "BodyName": "Hypoae Ain EH-D d12-10 C",
+        "DistanceFromArrivalLS": 26087.730469,
+        "Eccentricity": 0.195716,
+        "Luminosity": "Vab",
+        "OrbitalInclination": -40.034912,
+        "OrbitalPeriod": 9479406592,
+        "Parents": [
+          {
+            "Null": 0
+          }
+        ],
+        "Periapsis": 297.418274,
+        "Radius": 706388352,
+        "Rings": [
+          {
+            "InnerRad": 1165500000,
+            "MassMT": 54493000000000,
+            "Name": "Hypoae Ain EH-D d12-10 C A Belt",
+            "OuterRad": 2515900000,
+            "RingClass": "eRingClass_Metalic"
+          }
+        ],
+        "RotationPeriod": 400834.5625,
+        "ScanType": "AutoScan",
+        "SemiMajorAxis": 6751207817216,
+        "StarPos": [
+          -4675.1875,
+          88.59375,
+          -5104.625
+        ],
+        "StarSystem": "Hypoae Ain EH-D d12-10",
+        "StarType": "G",
+        "StellarMass": 0.90625,
+        "Subclass": 4,
+        "SurfaceTemperature": 5670,
+        "SystemAddress": 353101694827,
+        "WasDiscovered": true,
+        "WasMapped": false,
+        "event": "Scan",
+        "timestamp": "2020-03-14T14:34:30Z",
+        "Materials": [
+          {
+            "Name": "iron",
+            "Percent": 18.556917
+          },
+          {
+            "Name": "sulphur",
+            "Percent": 18.17186
+          },
+          {
+            "Name": "carbon",
+            "Percent": 15.28065
+          },
+          {
+            "Name": "nickel",
+            "Percent": 14.035675
+          },
+          {
+            "Name": "phosphorus",
+            "Percent": 9.782935
+          },
+          {
+            "Name": "chromium",
+            "Percent": 8.345663
+          },
+          {
+            "Name": "manganese",
+            "Percent": 7.663817
+          },
+          {
+            "Name": "vanadium",
+            "Percent": 4.556933
+          },
+          {
+            "Name": "cadmium",
+            "Percent": 1.441029
+          },
+          {
+            "Name": "antimony",
+            "Percent": 1.145552
+          },
+          {
+            "Name": "tungsten",
+            "Percent": 1.018961
+          }
+        ],
+        "Composition": {
+          "Ice": 0.0,
+          "Metal": 0.088863,
+          "Rock": 0.911137
+        }
+      }
+    }
+  ]
+]

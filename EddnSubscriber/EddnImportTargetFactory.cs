@@ -10,16 +10,16 @@ using System.Threading.Tasks;
 
 namespace EddnSubscriber
 {
-    public class DefaultImportTargetFactory : IImportTargetFactory
+    public class EddnImportTargetFactory : IImportTargetFactory
     {
         private readonly IDbImporter _dbImporter;
-        private readonly ILogger<DefaultImportTargetFactory> _logger;
+        private readonly ILogger<EddnImportTargetFactory> _logger;
         private readonly IDataReader _dataReader;
         private readonly IMapper _mapper;
 
-        public DefaultImportTargetFactory(
+        public EddnImportTargetFactory(
             IDbImporter dbImporter, 
-            ILogger<DefaultImportTargetFactory> logger, 
+            ILogger<EddnImportTargetFactory> logger, 
             IDataReader dataReader,
             IMapper mapper)
         {
@@ -29,27 +29,26 @@ namespace EddnSubscriber
             _mapper = mapper;
         }
 
-        public Task ImportAsync(string entity)
+        public async Task ImportAsync(string entity)
         {
             var baseEntity = _dataReader.Read<Entity<EntityMessageBase>>(entity);
             if (!Conststants.ValidRefs.Contains(baseEntity.Reference))
-                return Task.CompletedTask;
+                return;
 
             switch (baseEntity.Message.Event)
             {
                 case EddnEvent.FSDJump:
                     var eddnSystem = _dataReader.Read<Entity<EddnSystem>>(entity);
-                    var edsmSystem = _mapper.Map<EdSystem>(eddnSystem);
-                    return _dbImporter.ImportSystemAsync(edsmSystem);
+                    var edsmSystem = _mapper.Map<EdSystem>(eddnSystem.Message);
+                    await _dbImporter.ImportSystemAsync(edsmSystem);
+                    break;
 
                 case EddnEvent.Scan:
                 case EddnEvent.Location:
                     var eddnBody = _dataReader.Read<Entity<EddnCelestialBody>>(entity);
-                    var edsmBody = _mapper.Map<CelestialBody>(eddnBody);
-                    return _dbImporter.ImportBodyAsync(edsmBody);
-                
-                default:
-                    return Task.CompletedTask;
+                    var edsmBody = _mapper.Map<CelestialBody>(eddnBody.Message);
+                    await _dbImporter.ImportBodyAsync(edsmBody);
+                    break;
             }
         }
     }
